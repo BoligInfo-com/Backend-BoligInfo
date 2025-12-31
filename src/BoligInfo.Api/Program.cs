@@ -1,6 +1,8 @@
 using BoligInfo.Database;
 using BoligInfo.LoanRepository;
 using BoligInfo.EquityRepository;
+using BoligInfo.Services;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Add Authorization services
 builder.Services.AddAuthorization();
 
 // Add DbContext
@@ -20,6 +20,10 @@ builder.Services.AddDbContext<BoligInfoDbContext>(options =>
 // Register repositories
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IEquityRepository, EquityRepository>();
+
+// Register services
+builder.Services.AddScoped<ILoanService, LoanService>();
+builder.Services.AddScoped<IEquityService, EquityService>();
 
 var app = builder.Build();
 
