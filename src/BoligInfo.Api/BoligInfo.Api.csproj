@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Database\BoligInfo.Database.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.LoanRepository\BoligInfo.LoanRepository.csproj" />
   </ItemGroup>
 
 </Project>
