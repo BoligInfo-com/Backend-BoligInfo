@@ -1,13 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>d7c1fe20-0107-43a2-a99c-758222415efd</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Database\BoligInfo.Database.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.LoanRepository\BoligInfo.LoanRepository.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.Services.csproj" />
   </ItemGroup>
 
 </Project>

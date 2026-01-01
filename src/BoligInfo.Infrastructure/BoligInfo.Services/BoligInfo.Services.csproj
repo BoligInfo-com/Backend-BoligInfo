@@ -1,5 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BoligInfo.Core\BoligInfo.Core.csproj" />
+    <ProjectReference Include="..\BoligInfo.Repositories\BoligInfo.LoanRepository\BoligInfo.LoanRepository.csproj" />
+    <ProjectReference Include="..\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
