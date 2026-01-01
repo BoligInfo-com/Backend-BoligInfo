@@ -1,9 +1,12 @@
+using BoligInfo.Core.Enums;
 using BoligInfo.Database;
 using BoligInfo.LoanRepository;
 using BoligInfo.EquityRepository;
 using BoligInfo.Services;
 
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Npgsql.NameTranslation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +16,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
+var dataSource = dataSourceBuilder.Build();
+
 // Add DbContext
 builder.Services.AddDbContext<BoligInfoDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(dataSource, o => o.MapEnum<LoanType>("LoanType")));
 
 // Register repositories
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();

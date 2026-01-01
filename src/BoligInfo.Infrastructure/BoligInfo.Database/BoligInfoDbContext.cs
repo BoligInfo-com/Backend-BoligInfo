@@ -1,5 +1,7 @@
-﻿using BoligInfo.Core.Models;
+﻿using BoligInfo.Core.Enums;
+using BoligInfo.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.NameTranslation;
 
 
 namespace BoligInfo.Database;
@@ -21,8 +23,11 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // It maps the C# Enum to the Postgres Type.
+        modelBuilder.HasPostgresEnum<LoanType>("LoanType", null, new NpgsqlNullNameTranslator());
+        
         base.OnModelCreating(modelBuilder);
-
+        
         // Configure Equity entity
         modelBuilder.Entity<Equity>(entity =>
         {
@@ -63,8 +68,6 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
             
             entity.Property(l => l.LoanType)
                 .HasColumnName("LoanType")
-                .HasColumnType("\"LoanType\"") // Custom type in quotes
-                .HasConversion<string>() // Convert enum to string
                 .IsRequired(false); // Not NULL is disabled in your schema
             
             entity.Property(l => l.LoanAmount)
