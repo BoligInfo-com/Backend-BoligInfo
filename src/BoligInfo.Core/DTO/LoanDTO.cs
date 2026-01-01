@@ -6,7 +6,7 @@ public class LoanDto
     public string LoanType { get; set; }
     public double LoanAmount { get; set; }
     public double InterestRate { get; set; }
-    public int LoanLifetime { get; set; }
+    public int? LoanLifetime { get; set; }
     public long EquityId { get; set; }
 }
 

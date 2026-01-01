@@ -36,7 +36,9 @@ public class LoanService : ILoanService
     {
         var loan = new Loan
         {
-            LoanType = Enum.Parse<LoanType>(createLoanDto.LoanType),
+            LoanType = string.IsNullOrEmpty(createLoanDto.LoanType) 
+                ? null 
+                : Enum.Parse<LoanType>(createLoanDto.LoanType),
             LoanAmount = createLoanDto.LoanAmount,
             InterestRate = createLoanDto.InterestRate,
             LoanLifetime = createLoanDto.LoanLifetime,
@@ -79,7 +81,7 @@ public class LoanService : ILoanService
         return new LoanDto
         {
             Id = loan.Id,
-            LoanType = loan.LoanType.ToString(),
+            LoanType = loan.LoanType?.ToString() ?? string.Empty,
             LoanAmount = loan.LoanAmount,
             InterestRate = loan.InterestRate,
             LoanLifetime = loan.LoanLifetime,
