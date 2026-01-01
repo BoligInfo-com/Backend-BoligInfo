@@ -1,4 +1,4 @@
-﻿using BoligInfo.Core.DTOs;
+﻿using BoligInfo.Core.DTO;
 using BoligInfo.Services;
 using Microsoft.AspNetCore.Mvc;
 

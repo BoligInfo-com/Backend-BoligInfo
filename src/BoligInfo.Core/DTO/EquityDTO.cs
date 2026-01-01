@@ -1,4 +1,4 @@
-﻿namespace BoligInfo.Core.DTOs;
+﻿namespace BoligInfo.Core.DTO;
 
 public class EquityDto
 {

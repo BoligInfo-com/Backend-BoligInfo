@@ -1,4 +1,4 @@
-﻿using BoligInfo.Core.DTOs;
+﻿using BoligInfo.Core.DTO;
 
 namespace BoligInfo.Services;
 
