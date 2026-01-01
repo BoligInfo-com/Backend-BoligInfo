@@ -2,7 +2,7 @@
 
 public class LoanDto
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
     public string? LoanType { get; set; }
     public double LoanAmount { get; set; }
     public double InterestRate { get; set; }
