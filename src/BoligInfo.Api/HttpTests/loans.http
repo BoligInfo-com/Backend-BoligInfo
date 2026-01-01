@@ -1,0 +1,171 @@
+﻿@Api_HostAddress = http://localhost:5142
+@contentType = application/json
+
+### Variables for testing
+@equityId = 1
+@loanId = 1
+
+
+###############################################
+# LOAN ENDPOINTS
+###############################################
+
+### 1. Get all loans
+GET {{Api_HostAddress}}/api/loans
+Accept: {{contentType}}
+
+###
+
+### 2. Get loan by ID
+GET {{Api_HostAddress}}/api/loans/{{loanId}}
+Accept: {{contentType}}
+
+###
+
+### 3. Get loans by Equity ID
+GET {{Api_HostAddress}}/api/loans/equity/{{equityId}}
+Accept: {{contentType}}
+
+###
+
+### 4. Create a new loan - FIXED type
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "FIXED",
+  "loanAmount": 2500000.00,
+  "interestRate": 4.5,
+  "loanLifetime": 30,
+  "equityId": 1
+}
+
+###
+
+### 5. Create a new loan - ADJUSTABLE type
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "ADJUSTABLE",
+  "loanAmount": 1500000.00,
+  "interestRate": 3.2,
+  "loanLifetime": 20,
+  "equityId": 1
+}
+
+###
+
+### 6. Create a new loan - F5 type
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "F5",
+  "loanAmount": 3000000.00,
+  "interestRate": 5.0,
+  "loanLifetime": 25,
+  "equityId": 1
+}
+
+###
+
+### 7. Create a new loan - with null LoanType (test nullable)
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "",
+  "loanAmount": 500000.00,
+  "interestRate": 2.5,
+  "loanLifetime": 10,
+  "equityId": 1
+}
+
+###
+
+### 8. Update an existing loan - partial update (change interest rate only)
+PUT {{Api_HostAddress}}/api/loans/1
+Content-Type: {{contentType}}
+
+{
+  "interestRate": 3.8
+}
+
+###
+
+### 9. Update an existing loan - full update
+PUT {{Api_HostAddress}}/api/loans/1
+Content-Type: {{contentType}}
+
+{
+  "loanType": "F3",
+  "loanAmount": 2800000.00,
+  "interestRate": 4.2,
+  "loanLifetime": 28
+}
+
+###
+
+### 10. Update a non-existent loan (should return 404)
+PUT {{Api_HostAddress}}/api/loans/99999
+Content-Type: {{contentType}}
+
+{
+  "interestRate": 5.5
+}
+
+###
+
+### 11. Delete a loan
+DELETE {{Api_HostAddress}}/api/loans/2
+
+###
+
+### 12. Try to get deleted loan (should return 404)
+GET {{Api_HostAddress}}/api/loans/2
+Accept: {{contentType}}
+
+###
+
+### 13. Create loan with invalid Equity ID (test foreign key constraint)
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "FIXED",
+  "loanAmount": 1000000.00,
+  "interestRate": 4.0,
+  "loanLifetime": 15,
+  "equityId": 99999
+}
+
+###
+
+### 14. Create loan with negative amount (test validation)
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "FIXED",
+  "loanAmount": -1000000.00,
+  "interestRate": 4.0,
+  "loanLifetime": 15,
+  "equityId": 1
+}
+
+###
+
+### 15. Create loan with zero interest rate
+POST {{Api_HostAddress}}/api/loans
+Content-Type: {{contentType}}
+
+{
+  "loanType": "F1",
+  "loanAmount": 1000000.00,
+  "interestRate": 0,
+  "loanLifetime": 15,
+  "equityId": 1
+}
+
+###
