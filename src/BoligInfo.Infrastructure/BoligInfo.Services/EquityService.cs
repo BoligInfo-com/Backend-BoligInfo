@@ -35,7 +35,7 @@ public class EquityService : IEquityService
     {
         var equity = new Equity
         {
-            Currency = createEquityDto.Currency
+            Currency = createEquityDto.Currency ?? "DKK"
         };
 
         var createdEquity = await _equityRepository.AddAsync(equity);
