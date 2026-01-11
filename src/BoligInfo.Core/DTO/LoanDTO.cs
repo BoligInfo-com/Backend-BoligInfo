@@ -1,4 +1,6 @@
-﻿namespace BoligInfo.Core.DTO;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoligInfo.Core.DTO;
 
 public class LoanDto
 {
@@ -13,6 +15,7 @@ public class LoanDto
 public class CreateLoanDto
 {
     public string? LoanType { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "Loan amount must be zero or positive")]
     public double LoanAmount { get; set; }
     public double InterestRate { get; set; }
     public int LoanLifetime { get; set; }
@@ -22,6 +25,7 @@ public class CreateLoanDto
 public class UpdateLoanDto
 {
     public string? LoanType { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "Loan amount must be zero or positive")]
     public double? LoanAmount { get; set; }
     public double? InterestRate { get; set; }
     public int? LoanLifetime { get; set; }
