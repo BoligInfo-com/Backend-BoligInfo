@@ -21,6 +21,11 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
     /// </summary>
     public DbSet<Equity> Equities { get; set; }
     
+    /// <summary>
+    /// Gets or sets the <see cref="DbSet{Cash}"/> representing all Cash entities in the database.
+    /// </summary>
+    public DbSet<Cash> AllCash { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // It maps the C# Enum to the Postgres Type.
@@ -31,5 +36,6 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
         // Configure entities
         new EquityEntityTypeConfiguration().Configure(modelBuilder.Entity<Equity>());
         new LoanEntityTypeConfiguration().Configure(modelBuilder.Entity<Loan>());
+        new CashEntityTypeConfiguration().Configure(modelBuilder.Entity<Cash>());
     }
 }
