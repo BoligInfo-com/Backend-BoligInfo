@@ -21,7 +21,15 @@ public class CashEntityTypeConfiguration : IEntityTypeConfiguration<Cash>
             .HasColumnType("double precision")
             .HasDefaultValue(0)
             .IsRequired();
+        
+        // Configure foreign key relationship
+        builder
+            .HasOne<Equity>()
+            .WithOne(e => e.Cash)
+            .HasForeignKey<Cash>(c => c.Equity)
+            .IsRequired();
 
+        // Add check constraints
         builder.ToTable(t =>
         {
             t.HasCheckConstraint(
