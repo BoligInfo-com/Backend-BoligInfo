@@ -28,29 +28,10 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
         
         base.OnModelCreating(modelBuilder);
         
+        
         // Configure Equity entity
-        modelBuilder.Entity<Equity>(entity =>
-        {
-            // Set table name
-            entity.ToTable("Equity");
-            
-            // Configure primary key
-            entity.HasKey(e => e.Id);
-            
-            // Map property names to database column names
-            entity.Property(e => e.Id)
-                .HasColumnName("ID")
-                .HasColumnType("bigint")
-                .ValueGeneratedOnAdd(); // Corresponds to nextval() in DB
-            
-            entity.Property(e => e.Currency)
-                .HasColumnName("Currency")
-                .HasColumnType("character varying(10)")
-                .HasMaxLength(10)
-                .HasDefaultValue("DKK")
-                .IsRequired(false); // Not NULL is disabled
-        });
-
+        new EquityEntityTypeConfiguration().Configure(modelBuilder.Entity<Equity>());
+        
         // Configure Loan entity
         modelBuilder.Entity<Loan>(entity =>
         {
