@@ -28,8 +28,6 @@ builder.Services.AddDbContext<BoligInfoDbContext>(options =>
 // Register repositories
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IEquityRepository, EquityRepository>();
-
-// Register services
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IEquityService, EquityService>();
 
