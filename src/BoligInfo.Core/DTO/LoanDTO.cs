@@ -15,18 +15,27 @@ public class LoanDto
 public class CreateLoanDto
 {
     public string? LoanType { get; set; }
+    
     [Range(0, double.MaxValue, ErrorMessage = "Loan amount must be zero or positive")]
     public double LoanAmount { get; set; }
+    
     public double InterestRate { get; set; }
+    
+    [Range(1, int.MaxValue, ErrorMessage = "Loan lifetime must be positive")]
     public int LoanLifetime { get; set; }
+    
     public long EquityId { get; set; }
 }
 
 public class UpdateLoanDto
 {
     public string? LoanType { get; set; }
+    
     [Range(0, double.MaxValue, ErrorMessage = "Loan amount must be zero or positive")]
     public double? LoanAmount { get; set; }
+    
     public double? InterestRate { get; set; }
+    
+    [Range(1, int.MaxValue, ErrorMessage = "Loan lifetime must be positive")]
     public int? LoanLifetime { get; set; }
 }

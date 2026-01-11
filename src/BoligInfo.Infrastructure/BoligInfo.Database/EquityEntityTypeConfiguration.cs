@@ -22,6 +22,5 @@ public class EquityEntityTypeConfiguration : IEntityTypeConfiguration<Equity>
             .HasMaxLength(10)
             .HasDefaultValue("DKK")
             .IsRequired(false);
-        
     }
 }
