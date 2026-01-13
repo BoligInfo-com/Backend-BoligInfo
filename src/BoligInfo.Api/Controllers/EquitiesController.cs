@@ -6,7 +6,7 @@ namespace BoligInfo.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EquitiesController(IEquityService equityService) : ControllerBase
+public class EquitiesController(IEquityService equityService) : ControllerBase, IEquitiesController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EquityDto>>> GetAll()
