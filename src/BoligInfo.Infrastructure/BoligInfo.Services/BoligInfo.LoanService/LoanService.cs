@@ -1,34 +1,27 @@
 ﻿using BoligInfo.Core.DTO;
-using BoligInfo.Core.Models;
 using BoligInfo.Core.Enums;
+using BoligInfo.Core.Models;
 using BoligInfo.LoanRepository;
 
-namespace BoligInfo.Services;
+namespace BoligInfo.LoanService;
 
-public class LoanService : ILoanService
+public class LoanService(ILoanRepository loanRepository) : ILoanService
 {
-    private readonly ILoanRepository _loanRepository;
-
-    public LoanService(ILoanRepository loanRepository)
-    {
-        _loanRepository = loanRepository;
-    }
-
     public async Task<IEnumerable<LoanDto>> GetAllLoansAsync()
     {
-        var loans = await _loanRepository.GetAllAsync();
+        var loans = await loanRepository.GetAllAsync();
         return loans.Select(MapToDto);
     }
 
     public async Task<LoanDto?> GetLoanByIdAsync(long id)
     {
-        var loan = await _loanRepository.GetByIdAsync(id);
+        var loan = await loanRepository.GetByIdAsync(id);
         return loan == null ? null : MapToDto(loan);
     }
 
     public async Task<IEnumerable<LoanDto>> GetLoansByEquityIdAsync(long equityId)
     {
-        var loans = await _loanRepository.GetByEquityIdAsync(equityId);
+        var loans = await loanRepository.GetByEquityIdAsync(equityId);
         return loans.Select(MapToDto);
     }
 
@@ -45,13 +38,13 @@ public class LoanService : ILoanService
             EquityId = createLoanDto.EquityId
         };
 
-        var createdLoan = await _loanRepository.AddAsync(loan);
+        var createdLoan = await loanRepository.AddAsync(loan);
         return MapToDto(createdLoan);
     }
 
     public async Task<LoanDto> UpdateLoanAsync(long id, UpdateLoanDto updateLoanDto)
     {
-        var loan = await _loanRepository.GetByIdAsync(id);
+        var loan = await loanRepository.GetByIdAsync(id);
         if (loan == null)
             throw new KeyNotFoundException($"Loan with ID {id} not found");
 
@@ -67,13 +60,13 @@ public class LoanService : ILoanService
         if (updateLoanDto.LoanLifetime.HasValue)
             loan.LoanLifetime = updateLoanDto.LoanLifetime.Value;
 
-        await _loanRepository.UpdateAsync(loan);
+        await loanRepository.UpdateAsync(loan);
         return MapToDto(loan);
     }
 
     public async Task DeleteLoanAsync(long id)
     {
-        await _loanRepository.DeleteAsync(id);
+        await loanRepository.DeleteAsync(id);
     }
 
     private static LoanDto MapToDto(Loan loan)

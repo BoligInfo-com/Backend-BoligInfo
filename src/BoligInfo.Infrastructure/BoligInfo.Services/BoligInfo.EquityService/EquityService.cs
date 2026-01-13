@@ -2,32 +2,25 @@
 using BoligInfo.Core.Models;
 using BoligInfo.EquityRepository;
 
-namespace BoligInfo.Services;
+namespace BoligInfo.EquityService;
 
-public class EquityService : IEquityService
+public class EquityService(IEquityRepository equityRepository) : IEquityService
 {
-    private readonly IEquityRepository _equityRepository;
-
-    public EquityService(IEquityRepository equityRepository)
-    {
-        _equityRepository = equityRepository;
-    }
-
     public async Task<IEnumerable<EquityDto>> GetAllEquitiesAsync()
     {
-        var equities = await _equityRepository.GetAllAsync();
+        var equities = await equityRepository.GetAllAsync();
         return equities.Select(MapToDto);
     }
 
     public async Task<EquityDto?> GetEquityByIdAsync(long id)
     {
-        var equity = await _equityRepository.GetByIdAsync(id);
+        var equity = await equityRepository.GetByIdAsync(id);
         return equity == null ? null : MapToDto(equity);
     }
 
     public async Task<EquityDto?> GetEquityWithLoansAsync(long id)
     {
-        var equity = await _equityRepository.GetByIdWithLoansAsync(id);
+        var equity = await equityRepository.GetByIdWithLoansAsync(id);
         return equity == null ? null : MapToDtoWithLoans(equity);
     }
 
@@ -38,26 +31,26 @@ public class EquityService : IEquityService
             Currency = createEquityDto.Currency ?? "DKK"
         };
 
-        var createdEquity = await _equityRepository.AddAsync(equity);
+        var createdEquity = await equityRepository.AddAsync(equity);
         return MapToDto(createdEquity);
     }
 
     public async Task<EquityDto> UpdateEquityAsync(long id, UpdateEquityDto updateEquityDto)
     {
-        var equity = await _equityRepository.GetByIdAsync(id);
+        var equity = await equityRepository.GetByIdAsync(id);
         if (equity == null)
             throw new KeyNotFoundException($"Equity with ID {id} not found");
 
         if (updateEquityDto.Currency != null)
             equity.Currency = updateEquityDto.Currency;
 
-        await _equityRepository.UpdateAsync(equity);
+        await equityRepository.UpdateAsync(equity);
         return MapToDto(equity);
     }
 
     public async Task DeleteEquityAsync(long id)
     {
-        await _equityRepository.DeleteAsync(id);
+        await equityRepository.DeleteAsync(id);
     }
 
     private static EquityDto MapToDto(Equity equity)

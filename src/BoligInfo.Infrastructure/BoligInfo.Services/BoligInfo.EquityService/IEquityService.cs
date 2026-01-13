@@ -1,6 +1,6 @@
 ﻿using BoligInfo.Core.DTO;
 
-namespace BoligInfo.Services;
+namespace BoligInfo.EquityService;
 
 public interface IEquityService
 {
