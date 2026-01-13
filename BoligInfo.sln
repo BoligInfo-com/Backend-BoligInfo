@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
-	ProjectSection(SolutionItems) = preProject
-		src\.env = src\.env
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.Core", "src\BoligInfo.Core\BoligInfo.Core.csproj", "{1B724153-0AF8-4413-8D7E-E4FA167B963D}"
 EndProject
@@ -27,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.LoanRepository", "src\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.LoanRepository\BoligInfo.LoanRepository.csproj", "{2D7E015E-7221-4DDE-B5D8-A5A950E8AD1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.EquityRepository", "src\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj", "{4085A3C9-38BB-4EDB-A524-B0EACFC45E4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boliginfo.CashRepository", "src\BoligInfo.Infrastructure\BoligInfo.Repositories\Boliginfo.CashRepository\Boliginfo.CashRepository.csproj", "{8C93BA88-AA1A-4349-B195-4E4DE25FF754}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +121,18 @@ Global
 		{4085A3C9-38BB-4EDB-A524-B0EACFC45E4E}.Release|x64.Build.0 = Release|Any CPU
 		{4085A3C9-38BB-4EDB-A524-B0EACFC45E4E}.Release|x86.ActiveCfg = Release|Any CPU
 		{4085A3C9-38BB-4EDB-A524-B0EACFC45E4E}.Release|x86.Build.0 = Release|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Debug|x64.Build.0 = Debug|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Debug|x86.Build.0 = Debug|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Release|x64.ActiveCfg = Release|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Release|x64.Build.0 = Release|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Release|x86.ActiveCfg = Release|Any CPU
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,5 +147,6 @@ Global
 		{755A62C0-3E19-C02F-3862-A9701CE6BC49} = {39119641-8023-F36C-0DDE-6528CDDCEAAD}
 		{2D7E015E-7221-4DDE-B5D8-A5A950E8AD1C} = {755A62C0-3E19-C02F-3862-A9701CE6BC49}
 		{4085A3C9-38BB-4EDB-A524-B0EACFC45E4E} = {755A62C0-3E19-C02F-3862-A9701CE6BC49}
+		{8C93BA88-AA1A-4349-B195-4E4DE25FF754} = {755A62C0-3E19-C02F-3862-A9701CE6BC49}
 	EndGlobalSection
 EndGlobal

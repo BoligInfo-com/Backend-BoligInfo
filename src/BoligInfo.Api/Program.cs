@@ -10,6 +10,11 @@ using Npgsql.NameTranslation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
+var dataSource = dataSourceBuilder.Build();
+
 // Add services to the container
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -20,10 +25,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
-var dataSource = dataSourceBuilder.Build();
 
 // Add DbContext
 builder.Services.AddDbContext<BoligInfoDbContext>(options =>
