@@ -2,7 +2,8 @@ using BoligInfo.Core.Enums;
 using BoligInfo.Database;
 using BoligInfo.LoanRepository;
 using BoligInfo.EquityRepository;
-using BoligInfo.Services;
+using BoligInfo.EquityService;
+using BoligInfo.LoanService;
 
 using Microsoft.EntityFrameworkCore;
 using Npgsql;

@@ -1,5 +1,5 @@
 ﻿using BoligInfo.Core.DTO;
-using BoligInfo.Services;
+using BoligInfo.EquityService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoligInfo.Api.Controllers;
