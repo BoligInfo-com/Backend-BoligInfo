@@ -20,6 +20,8 @@ BoligInfo/
 │   │   │   ├── BoligInfo.LoanRepository/
 │   │   │   └── BoligInfo.EquityRepository/
 │   │   └── BoligInfo.Services/      # Business logic
+|   |       ├── BoligInfo.LoanService/
+|   |       └── BoligInfo.EquityService/
 │   └── BoligInfo.Api/               # REST API endpoints
 ```
 
