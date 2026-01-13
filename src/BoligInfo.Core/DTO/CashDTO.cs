@@ -18,5 +18,5 @@ public class CreateCashDto
 
 public class UpdateCashDto
 {
-    public double CashAmount { get; set; }
+    public double? CashAmount { get; set; }
 }
