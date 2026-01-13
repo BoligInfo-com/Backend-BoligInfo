@@ -1,6 +1,13 @@
-﻿namespace BoligInfo.CashService;
+﻿using BoligInfo.Core.DTO;
 
-public class ICashService
+namespace BoligInfo.CashService;
+
+public interface ICashService
 {
-    
+    Task<IEnumerable<CashDto>> GetAllCashAsync();
+    Task<CashDto?> GetCashByIdAsync(long id);
+    Task<IEnumerable<CashDto>> GetCashByEquityIdAsync(long equityId);
+    Task<CashDto> CreateCashAsync(CreateCashDto createCashDto);
+    Task<CashDto> UpdateCashAsync(long id, UpdateCashDto updateCashDto);
+    Task DeleteCashAsync(long id);
 }

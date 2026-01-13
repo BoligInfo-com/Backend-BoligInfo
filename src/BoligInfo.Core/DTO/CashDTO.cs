@@ -2,7 +2,7 @@
 
 namespace BoligInfo.Core.DTO;
 
-public class CashDTO
+public class CashDto
 {
     public long Id { get; init; }
     public double CashAmount { get; set; }
