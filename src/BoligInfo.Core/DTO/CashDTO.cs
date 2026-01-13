@@ -1,10 +1,13 @@
-﻿namespace BoligInfo.Core.DTO;
+﻿using BoligInfo.Core.Models;
+
+namespace BoligInfo.Core.DTO;
 
 public class CashDTO
 {
     public long Id { get; init; }
     public double CashAmount { get; set; }
     public long EquityId { get; set; }
+    public Equity Equity { get; set; } = null!;
 }
 
 public class CreateCashDto
