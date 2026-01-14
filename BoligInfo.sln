@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.LoanService", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.CashService", "src\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.CashService\BoligInfo.CashService.csproj", "{D7EA4282-4BEA-44B8-A9C0-B5F0F70557D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.Tests.Integration", "test\BoligInfo.Tests.Integration\BoligInfo.Tests.Integration.csproj", "{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,18 @@ Global
 		{D7EA4282-4BEA-44B8-A9C0-B5F0F70557D3}.Release|x64.Build.0 = Release|Any CPU
 		{D7EA4282-4BEA-44B8-A9C0-B5F0F70557D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{D7EA4282-4BEA-44B8-A9C0-B5F0F70557D3}.Release|x86.Build.0 = Release|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Debug|x64.Build.0 = Debug|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Debug|x86.Build.0 = Debug|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Release|x64.ActiveCfg = Release|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Release|x64.Build.0 = Release|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Release|x86.ActiveCfg = Release|Any CPU
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,5 +195,6 @@ Global
 		{BA614840-748C-479B-81CD-0B96FE0883B7} = {3756C3E6-9636-8392-5FF0-4498A42E6C34}
 		{46941511-FAC6-4C80-8ECA-1FEE327F1AE3} = {3756C3E6-9636-8392-5FF0-4498A42E6C34}
 		{D7EA4282-4BEA-44B8-A9C0-B5F0F70557D3} = {3756C3E6-9636-8392-5FF0-4498A42E6C34}
+		{C73F2E7D-D99F-4F1F-A6E6-41ACE6266956} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
 	EndGlobalSection
 EndGlobal
