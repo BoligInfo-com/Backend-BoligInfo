@@ -2,7 +2,7 @@
 using BoligInfo.EquityService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoligInfo.Api.Controllers;
+namespace BoligInfo.Api.Controllers.EquityController;
 
 [ApiController]
 [Route("api/[controller]")]

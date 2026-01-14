@@ -1,6 +1,11 @@
-﻿namespace BoligInfo.Api.Controllers.CashController;
+﻿using BoligInfo.CashService;
+using Microsoft.AspNetCore.Mvc;
 
-public class AllCashController
+namespace BoligInfo.Api.Controllers.CashController;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AllCashController(ICashService cashService) : ControllerBase, IAllCashController
 {
     
 }

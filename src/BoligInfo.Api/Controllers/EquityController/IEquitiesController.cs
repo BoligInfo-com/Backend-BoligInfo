@@ -1,7 +1,7 @@
 ﻿using BoligInfo.Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoligInfo.Api.Controllers;
+namespace BoligInfo.Api.Controllers.EquityController;
 
 public interface IEquitiesController
 {

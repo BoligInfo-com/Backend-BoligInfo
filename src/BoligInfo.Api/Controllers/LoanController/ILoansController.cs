@@ -1,7 +1,7 @@
 ﻿using BoligInfo.Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoligInfo.Api.Controllers;
+namespace BoligInfo.Api.Controllers.LoanController;
 
 public interface ILoansController
 {

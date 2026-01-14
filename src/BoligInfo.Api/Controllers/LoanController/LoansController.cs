@@ -2,7 +2,7 @@
 using BoligInfo.LoanService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoligInfo.Api.Controllers;
+namespace BoligInfo.Api.Controllers.LoanController;
 
 [ApiController]
 [Route("api/[controller]")]
