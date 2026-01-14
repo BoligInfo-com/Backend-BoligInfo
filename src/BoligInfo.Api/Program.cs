@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Npgsql.NameTranslation;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -57,3 +58,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;
