@@ -22,4 +22,8 @@
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\EquityController\" />
+  </ItemGroup>
+
 </Project>
