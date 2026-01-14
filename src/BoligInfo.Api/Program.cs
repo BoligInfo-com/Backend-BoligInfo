@@ -1,3 +1,5 @@
+using Boliginfo.CashRepository;
+using BoligInfo.CashService;
 using BoligInfo.Core.Enums;
 using BoligInfo.Database;
 using BoligInfo.LoanRepository;
@@ -31,11 +33,15 @@ builder.Services.AddAuthorization();
 builder.Services.AddDbContext<BoligInfoDbContext>(options =>
     options.UseNpgsql(dataSource, o => o.MapEnum<LoanType>("LoanType")));
 
-// Register repositories
+// Register repositories & services for the scope of a request
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IEquityRepository, EquityRepository>();
+builder.Services.AddScoped<ICashRepository, CashRepository>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IEquityService, EquityService>();
+builder.Services.AddScoped<ICashService, CashService>();
+
+
 
 var app = builder.Build();
 
