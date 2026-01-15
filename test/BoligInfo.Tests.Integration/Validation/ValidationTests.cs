@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Validation;
 
-public class ValidationTests : IntegrationTestBase
+public class ValidationTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
 {
-    public ValidationTests(WebApplicationFactory<Program> factory) : base(factory) { }
-
     private async Task<long> CreateEquityAsync()
     {
         var createDto = new CreateEquityDto { Currency = "DKK" };
