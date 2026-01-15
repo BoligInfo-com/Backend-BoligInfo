@@ -10,4 +10,6 @@ public interface ILoanRepository
     Task DeleteAsync(long id);
     Task<bool> ExistsAsync(long id);
     Task SaveChangesAsync();
+    Task<Loan> AddAsync(Loan loan);
+    Task UpdateAsync(Loan loan);
 }

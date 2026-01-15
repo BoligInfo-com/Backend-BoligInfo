@@ -10,4 +10,6 @@ public interface ICashRepository
     Task DeleteAsync(long id);
     Task<bool> ExistsAsync(long id);
     Task SaveChangesAsync();
+    Task<Cash> AddAsync(Cash cash);
+    Task UpdateAsync(Cash cash);
 }

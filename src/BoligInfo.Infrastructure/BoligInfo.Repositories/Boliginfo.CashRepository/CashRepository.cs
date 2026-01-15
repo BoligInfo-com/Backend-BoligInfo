@@ -22,6 +22,19 @@ public class CashRepository(BoligInfoDbContext context) : ICashRepository
             .Where(c => c.EquityId == equityId)
             .ToListAsync();
     }
+    
+    public async Task<Cash> AddAsync(Cash cash)
+    {
+        context.AllCash.Add(cash);
+        await context.SaveChangesAsync();
+        return cash;
+    }
+
+    public async Task UpdateAsync(Cash cash)
+    {
+        context.AllCash.Update(cash);
+        await context.SaveChangesAsync();
+    }
 
     public async Task DeleteAsync(long id)
     {

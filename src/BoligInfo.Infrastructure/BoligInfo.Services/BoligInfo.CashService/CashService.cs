@@ -27,17 +27,24 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
 
     public async Task<CashDto> CreateCashAsync(CreateCashDto createCashDto)
     {
-        var equity = await equityRepository.GetByIdAsync(createCashDto.EquityId);
+        // Ensure parent Equity exists
+        var equity = await equityRepository.GetByIdWithCashAsync(createCashDto.EquityId);
         if (equity == null)
             throw new KeyNotFoundException($"Equity {createCashDto.EquityId} not found");
         
-        // Enforce 1:1 Cash
+        // Ensure equity does not have another cash relation
+        if (equity.Cash != null)
+            throw new InvalidOperationException($"Equity {createCashDto.EquityId} already has a Cash");
+        
+
         equity.Cash = new Cash
         {
             CashAmount = createCashDto.CashAmount,
+            EquityId = createCashDto.EquityId
         };
+        
 
-        await cashRepository.SaveChangesAsync();
+        await cashRepository.AddAsync(equity.Cash);
         
         return MapToDto(equity.Cash);
     }
@@ -51,7 +58,7 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
         if (updateCashDto.CashAmount.HasValue)
             cash.CashAmount = updateCashDto.CashAmount.Value;
 
-        await cashRepository.SaveChangesAsync();
+        await cashRepository.UpdateAsync(cash);
         return MapToDto(cash);
     }
 

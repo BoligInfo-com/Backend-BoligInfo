@@ -41,12 +41,13 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
             LoanAmount = createLoanDto.LoanAmount,
             InterestRate = createLoanDto.InterestRate,
             LoanLifetime = createLoanDto.LoanLifetime,
+            EquityId = createLoanDto.EquityId,
         };
         
         equity.Loans ??= new List<Loan>();
         equity.Loans.Add(loan);
 
-        await loanRepository.SaveChangesAsync();
+        await loanRepository.AddAsync(loan);
         
         return MapToDto(loan);
     }
@@ -69,7 +70,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
         if (updateLoanDto.LoanLifetime.HasValue)
             loan.LoanLifetime = updateLoanDto.LoanLifetime.Value;
 
-        await loanRepository.SaveChangesAsync();
+        await loanRepository.UpdateAsync(loan);
         return MapToDto(loan);
     }
 

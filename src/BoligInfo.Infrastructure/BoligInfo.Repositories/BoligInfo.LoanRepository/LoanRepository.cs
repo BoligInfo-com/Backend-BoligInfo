@@ -24,6 +24,19 @@ public class LoanRepository(BoligInfoDbContext context) : ILoanRepository
             .ToListAsync();
     }
     
+    public async Task<Loan> AddAsync(Loan loan)
+    {
+        context.Loans.Add(loan);
+        await context.SaveChangesAsync();
+        return loan;
+    }
+
+    public async Task UpdateAsync(Loan loan)
+    {
+        context.Loans.Update(loan);
+        await context.SaveChangesAsync();
+    }
+    
     public async Task DeleteAsync(long id)
     {
         var loan = await context.Loans.FindAsync(id);
