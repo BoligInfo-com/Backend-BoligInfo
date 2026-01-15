@@ -1,5 +1,4 @@
-﻿using BoligInfo.Core.Models;
-
+﻿
 namespace BoligInfo.Core.DTO;
 
 public class CashDto
@@ -7,7 +6,6 @@ public class CashDto
     public long Id { get; init; }
     public double CashAmount { get; set; }
     public long EquityId { get; set; }
-    public Equity Equity { get; set; } = null!;
 }
 
 public class CreateCashDto

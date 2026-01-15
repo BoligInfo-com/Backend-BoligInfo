@@ -26,7 +26,7 @@ public class CashEntityTypeConfiguration : IEntityTypeConfiguration<Cash>
         builder
             .HasOne<Equity>()
             .WithOne(e => e.Cash)
-            .HasForeignKey<Cash>(c => c.Equity)
+            .HasForeignKey<Cash>(c => c.EquityId)
             .IsRequired();
 
         // Add check constraints

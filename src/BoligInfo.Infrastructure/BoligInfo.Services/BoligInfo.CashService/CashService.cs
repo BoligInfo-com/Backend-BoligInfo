@@ -61,7 +61,6 @@ public class CashService(ICashRepository cashRepository) : ICashService
             Id = cash.Id,
             CashAmount = cash.CashAmount,
             EquityId = cash.EquityId,
-            Equity = cash.Equity,
         };
     }
 }
