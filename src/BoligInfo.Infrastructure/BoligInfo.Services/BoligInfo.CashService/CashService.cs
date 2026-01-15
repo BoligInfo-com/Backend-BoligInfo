@@ -22,7 +22,7 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
     public async Task<IEnumerable<CashDto>> GetAllCashByEquityIdAsync(long equityId)
     {
         var allCash = await cashRepository.GetByEquityIdAsync(equityId);
-        return allCash.Select(MapToDto);
+        return allCash?.Select(MapToDto) ?? []; 
     }
 
     public async Task<CashDto> CreateCashAsync(CreateCashDto createCashDto)

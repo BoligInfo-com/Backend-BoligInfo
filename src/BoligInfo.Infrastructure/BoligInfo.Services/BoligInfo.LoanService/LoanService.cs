@@ -3,7 +3,6 @@ using BoligInfo.Core.Enums;
 using BoligInfo.Core.Models;
 using BoligInfo.EquityRepository;
 using BoligInfo.LoanRepository;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace BoligInfo.LoanService;
 
@@ -24,7 +23,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
     public async Task<IEnumerable<LoanDto>> GetLoansByEquityIdAsync(long equityId)
     {
         var loans = await loanRepository.GetByEquityIdAsync(equityId);
-        return loans.Select(MapToDto);
+        return loans?.Select(MapToDto) ?? [];
     }
 
     public async Task<LoanDto> CreateLoanAsync(CreateLoanDto createLoanDto)
