@@ -23,6 +23,13 @@ public class EquityRepository(BoligInfoDbContext context) : IEquityRepository
             .Include(e => e.Loans)
             .FirstOrDefaultAsync(e => e.Id == id);
     }
+    
+    public async Task<Equity?> GetByIdWithCashAsync(long id)
+    {
+        return await context.Equities
+            .Include(e => e.Cash)
+            .FirstOrDefaultAsync(e => e.Id == id);
+    }
 
     public async Task<Equity> AddAsync(Equity equity)
     {
@@ -45,6 +52,11 @@ public class EquityRepository(BoligInfoDbContext context) : IEquityRepository
             context.Equities.Remove(equity);
             await context.SaveChangesAsync();
         }
+    }
+    
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
     }
 
     public async Task<bool> ExistsAsync(long id)

@@ -24,6 +24,12 @@ public class EquityService(IEquityRepository equityRepository) : IEquityService
         return equity == null ? null : MapToDtoWithLoans(equity);
     }
 
+    public async Task<EquityDto?> GetEquityWithCashAsync(long id)
+    {
+        var equity = await equityRepository.GetByIdWithCashAsync(id);
+        return equity == null ? null : MapToDtoWithCash(equity);
+    }
+
     public async Task<EquityDto> CreateEquityAsync(CreateEquityDto createEquityDto)
     {
         var equity = new Equity
@@ -44,12 +50,21 @@ public class EquityService(IEquityRepository equityRepository) : IEquityService
         if (updateEquityDto.Currency != null)
             equity.Currency = updateEquityDto.Currency;
 
-        await equityRepository.UpdateAsync(equity);
+        await equityRepository.SaveChangesAsync();
         return MapToDto(equity);
     }
 
     public async Task DeleteEquityAsync(long id)
     {
+        var equity = await equityRepository.GetByIdWithCashAsync(id);
+        if (equity == null)
+            throw new KeyNotFoundException($"Equity with ID {id} not found");
+
+        if (equity.Loans != null)
+            equity.Loans.Clear(); 
+        
+        equity.Cash = null;
+        
         await equityRepository.DeleteAsync(id);
     }
 
@@ -77,6 +92,21 @@ public class EquityService(IEquityRepository equityRepository) : IEquityService
                 LoanLifetime = l.LoanLifetime,
                 EquityId = l.EquityId
             }).ToList()
+        };
+    }
+    
+    private static EquityDto MapToDtoWithCash(Equity equity)
+    {
+        return new EquityDto
+        {
+            Id = equity.Id,
+            Currency = equity.Currency,
+            Cash = equity.Cash != null ? new Cash
+            {
+                Id = equity.Cash.Id,
+                CashAmount = equity.Cash.CashAmount,
+                EquityId = equity.Cash.EquityId
+            } : null
         };
     }
 }
