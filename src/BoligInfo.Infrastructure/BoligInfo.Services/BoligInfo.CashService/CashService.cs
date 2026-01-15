@@ -1,10 +1,11 @@
 ﻿using Boliginfo.CashRepository;
 using BoligInfo.Core.DTO;
 using BoligInfo.Core.Models;
+using BoligInfo.EquityRepository;
 
 namespace BoligInfo.CashService;
 
-public class CashService(ICashRepository cashRepository) : ICashService
+public class CashService(ICashRepository cashRepository, IEquityRepository equityRepository) : ICashService
 {
     public async Task<IEnumerable<CashDto>> GetAllCashAsync()
     {
@@ -26,14 +27,19 @@ public class CashService(ICashRepository cashRepository) : ICashService
 
     public async Task<CashDto> CreateCashAsync(CreateCashDto createCashDto)
     {
-        var cash = new Cash
+        var equity = await equityRepository.GetByIdAsync(createCashDto.EquityId);
+        if (equity == null)
+            throw new KeyNotFoundException($"Equity {createCashDto.EquityId} not found");
+        
+        // Enforce 1:1 Cash
+        equity.Cash = new Cash
         {
             CashAmount = createCashDto.CashAmount,
-            EquityId = createCashDto.EquityId,
         };
 
-        var createdCash = await cashRepository.AddAsync(cash);
-        return MapToDto(createdCash);
+        await cashRepository.SaveChangesAsync();
+        
+        return MapToDto(equity.Cash);
     }
 
     public async Task<CashDto> UpdateCashAsync(long id, UpdateCashDto updateCashDto)
@@ -45,7 +51,7 @@ public class CashService(ICashRepository cashRepository) : ICashService
         if (updateCashDto.CashAmount.HasValue)
             cash.CashAmount = updateCashDto.CashAmount.Value;
 
-        await cashRepository.UpdateAsync(cash);
+        await cashRepository.SaveChangesAsync();
         return MapToDto(cash);
     }
 

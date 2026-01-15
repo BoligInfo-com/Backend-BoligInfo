@@ -23,19 +23,6 @@ public class CashRepository(BoligInfoDbContext context) : ICashRepository
             .ToListAsync();
     }
 
-    public async Task<Cash> AddAsync(Cash cash)
-    {
-        context.AllCash.Add(cash);
-        await context.SaveChangesAsync();
-        return cash;
-    }
-
-    public async Task UpdateAsync(Cash cash)
-    {
-        context.AllCash.Update(cash);
-        await context.SaveChangesAsync();
-    }
-
     public async Task DeleteAsync(long id)
     {
         var cash = await context.AllCash.FindAsync(id);
@@ -44,6 +31,11 @@ public class CashRepository(BoligInfoDbContext context) : ICashRepository
             context.AllCash.Remove(cash);
             await context.SaveChangesAsync();
         }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
     }
 
     public async Task<bool> ExistsAsync(long id)
