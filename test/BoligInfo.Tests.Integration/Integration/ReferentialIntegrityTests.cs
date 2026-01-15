@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
+using BoligInfo.Tests.Integration.Setup;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Integration;
@@ -145,7 +146,7 @@ public class ReferentialIntegrityTests(WebApplicationFactory<Program> factory) :
         context.Equities.Add(equity1);
         await context.SaveChangesAsync();
 
-        var equity2 = new BoligInfo.Core.Models.Equity { Currency = "EUR" };
+        var equity2 = new Core.Models.Equity { Currency = "EUR" };
         context.Equities.Add(equity2);
         await context.SaveChangesAsync();
 

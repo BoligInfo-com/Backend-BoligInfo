@@ -1,15 +1,13 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
+using BoligInfo.Tests.Integration.Setup;
 using Microsoft.AspNetCore.Mvc.Testing;
-using IntegrationTestBase = BoligInfo.Tests.Integration.Integration.IntegrationTestBase;
 
 namespace BoligInfo.Tests.Integration.Controllers;
 
-public class CashControllerTests : IntegrationTestBase
+public class CashControllerTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
 {
-    public CashControllerTests(WebApplicationFactory<Program> factory) : base(factory) { }
-
     private async Task<long> CreateEquityAsync(string currency = "DKK")
     {
         var createDto = new CreateEquityDto { Currency = currency };

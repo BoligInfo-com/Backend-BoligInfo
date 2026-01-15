@@ -14,10 +14,21 @@ using Npgsql.NameTranslation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
-var dataSource = dataSourceBuilder.Build();
+
+// configure PostgreSQL if not in test environment
+if (!builder.Environment.EnvironmentName.Equals("Test", StringComparison.OrdinalIgnoreCase))
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+    dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
+    var dataSource = dataSourceBuilder.Build();
+    
+    // Add DbContext
+    builder.Services.AddDbContext<BoligInfoDbContext>(options =>
+        options.UseNpgsql(dataSource, o => o.MapEnum<LoanType>("LoanType")));
+}
+    
+
 
 // Add services to the container
 builder.Services.AddControllers()
@@ -30,10 +41,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 
 
-// Add DbContext
-builder.Services.AddDbContext<BoligInfoDbContext>(options =>
-    options.UseNpgsql(dataSource, o => o.MapEnum<LoanType>("LoanType")));
-
 // Register repositories & services for the scope of a request
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IEquityRepository, EquityRepository>();
@@ -41,7 +48,6 @@ builder.Services.AddScoped<ICashRepository, CashRepository>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IEquityService, EquityService>();
 builder.Services.AddScoped<ICashService, CashService>();
-
 
 
 var app = builder.Build();

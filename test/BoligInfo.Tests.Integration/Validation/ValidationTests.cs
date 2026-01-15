@@ -11,7 +11,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
     private async Task<long> CreateEquityAsync()
     {
         var createDto = new CreateEquityDto { Currency = "DKK" };
-        var response = await _client.PostAsJsonAsync("/api/equities", createDto);
+        var response = await Client.PostAsJsonAsync("/api/equities", createDto);
         var equity = await response.Content.ReadFromJsonAsync<EquityDto>();
         return equity!.Id;
     }
@@ -30,7 +30,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
             LoanLifetime = 15
         };
 
-        var response = await _client.PostAsJsonAsync("/api/loans", createDto);
+        var response = await Client.PostAsJsonAsync("/api/loans", createDto);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -50,7 +50,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
             LoanLifetime = lifetime
         };
 
-        var response = await _client.PostAsJsonAsync("/api/loans", createDto);
+        var response = await Client.PostAsJsonAsync("/api/loans", createDto);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -70,7 +70,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
             LoanLifetime = 15
         };
 
-        var response = await _client.PostAsJsonAsync("/api/loans", createDto);
+        var response = await Client.PostAsJsonAsync("/api/loans", createDto);
 
         response.EnsureSuccessStatusCode();
     }
@@ -91,7 +91,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
             LoanLifetime = lifetime
         };
 
-        var response = await _client.PostAsJsonAsync("/api/loans", createDto);
+        var response = await Client.PostAsJsonAsync("/api/loans", createDto);
 
         response.EnsureSuccessStatusCode();
     }
@@ -101,7 +101,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
     {
         var createDto = new CreateEquityDto { Currency = null };
 
-        var response = await _client.PostAsJsonAsync("/api/equities", createDto);
+        var response = await Client.PostAsJsonAsync("/api/equities", createDto);
 
         response.EnsureSuccessStatusCode();
     }
@@ -116,7 +116,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
     {
         var createDto = new CreateEquityDto { Currency = currency };
 
-        var response = await _client.PostAsJsonAsync("/api/equities", createDto);
+        var response = await Client.PostAsJsonAsync("/api/equities", createDto);
 
         response.EnsureSuccessStatusCode();
         var equity = await response.Content.ReadFromJsonAsync<EquityDto>();
@@ -133,7 +133,7 @@ public class ValidationTests(WebApplicationFactory<Program> factory) : Integrati
             EquityId = equityId,
             CashAmount = 0.0
         };
-        var validResponse = await _client.PostAsJsonAsync("/api/allcash", validCash);
+        var validResponse = await Client.PostAsJsonAsync("/api/allcash", validCash);
         validResponse.EnsureSuccessStatusCode();
     }
 }

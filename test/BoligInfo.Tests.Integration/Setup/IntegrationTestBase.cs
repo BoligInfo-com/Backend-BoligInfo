@@ -1,32 +1,38 @@
 ﻿using BoligInfo.Database;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BoligInfo.Tests.Integration.Setup;
 
-// Base test class for setting up the test server
 public class IntegrationTestBase : IClassFixture<WebApplicationFactory<Program>>
 {
-    protected readonly HttpClient _client;
-    protected readonly WebApplicationFactory<Program> _factory;
+    protected readonly HttpClient Client;
+    private readonly WebApplicationFactory<Program> _factory;
 
-    public IntegrationTestBase(WebApplicationFactory<Program> factory)
+    protected IntegrationTestBase(WebApplicationFactory<Program> factory)
     {
         _factory = factory.WithWebHostBuilder(builder =>
         {
+            // Set environment to "Test" so Program.cs skips PostgresSQL setup
+            builder.UseEnvironment("Test");
+            
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType == typeof(DbContextOptions<BoligInfoDbContext>));
-                if (descriptor != null)
-                    services.Remove(descriptor);
-
+                // Remove any existing DbContext registrations
+                services.RemoveAll<DbContextOptions<BoligInfoDbContext>>();
+                services.RemoveAll<DbContextOptions>();
+                services.RemoveAll<BoligInfoDbContext>();
+                
+                // Add in-memory database for testing
                 services.AddDbContext<BoligInfoDbContext>(options =>
                 {
                     options.UseInMemoryDatabase($"InMemoryTest_{Guid.NewGuid()}");
                 });
 
+                // Build service provider and ensure database is created
                 var sp = services.BuildServiceProvider();
                 using var scope = sp.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<BoligInfoDbContext>();
@@ -34,7 +40,7 @@ public class IntegrationTestBase : IClassFixture<WebApplicationFactory<Program>>
             });
         });
 
-        _client = _factory.CreateClient();
+        Client = _factory.CreateClient();
     }
 
     protected async Task<BoligInfoDbContext> GetDbContextAsync()

@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
+using BoligInfo.Tests.Integration.Setup;
 using Microsoft.AspNetCore.Mvc.Testing;
-using IntegrationTestBase = BoligInfo.Tests.Integration.Integration.IntegrationTestBase;
 
 namespace BoligInfo.Tests.Integration.Controllers;
 
