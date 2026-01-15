@@ -60,9 +60,8 @@ public class EquityService(IEquityRepository equityRepository) : IEquityService
         if (equity == null)
             throw new KeyNotFoundException($"Equity with ID {id} not found");
 
-        if (equity.Loans != null)
-            equity.Loans.Clear(); 
-        
+        // Delete corresponding cash and loans
+        equity.Loans?.Clear();
         equity.Cash = null;
         
         await equityRepository.DeleteAsync(id);
