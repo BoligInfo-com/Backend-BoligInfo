@@ -38,8 +38,16 @@ public class EquitiesController(IEquityService equityService) : ControllerBase, 
     [HttpPost]
     public async Task<ActionResult<EquityDto>> Create(CreateEquityDto createEquityDto)
     {
-        var equity = await equityService.CreateEquityAsync(createEquityDto);
-        return CreatedAtAction(nameof(GetById), new { id = equity.Id }, equity);
+        try
+        {
+            var equity = await equityService.CreateEquityAsync(createEquityDto);
+            return CreatedAtAction(nameof(GetById), new { id = equity.Id }, equity);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+
     }
 
     [HttpPut("{id:long}")]
