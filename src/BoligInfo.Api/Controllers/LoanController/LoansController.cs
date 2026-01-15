@@ -35,8 +35,16 @@ public class LoansController(ILoanService loanService) : ControllerBase, ILoansC
     [HttpPost]
     public async Task<ActionResult<LoanDto>> Create(CreateLoanDto createLoanDto)
     {
-        var loan = await loanService.CreateLoanAsync(createLoanDto);
-        return CreatedAtAction(nameof(GetById), new { id = loan.Id }, loan);
+        try
+        {
+            var loan = await loanService.CreateLoanAsync(createLoanDto);
+            return CreatedAtAction(nameof(GetById), new { id = loan.Id }, loan);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+
     }
 
     [HttpPut("{id:long}")]

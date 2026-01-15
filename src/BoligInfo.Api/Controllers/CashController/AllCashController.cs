@@ -35,8 +35,15 @@ public class AllCashController(ICashService cashService) : ControllerBase, IAllC
     [HttpPost]
     public async Task<ActionResult<CashDto>> Create(CreateCashDto createCashDto)
     {
-        var cash = await cashService.CreateCashAsync(createCashDto);
-        return CreatedAtAction(nameof(GetById), new { id = cash.Id }, cash);
+        try
+        {
+            var cash = await cashService.CreateCashAsync(createCashDto);
+            return CreatedAtAction(nameof(GetById), new { id = cash.Id }, cash);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     [HttpPut("{id:long}")]
