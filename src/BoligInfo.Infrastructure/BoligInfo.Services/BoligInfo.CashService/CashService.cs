@@ -57,6 +57,10 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
 
     public async Task DeleteCashAsync(long id)
     {
+        var exists = await cashRepository.ExistsAsync(id);
+        if (!exists)
+            throw new KeyNotFoundException($"Cash {id} not found");
+        
         await cashRepository.DeleteAsync(id);
     }
 

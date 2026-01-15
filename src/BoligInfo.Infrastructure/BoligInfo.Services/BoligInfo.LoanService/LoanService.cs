@@ -1,11 +1,13 @@
 ﻿using BoligInfo.Core.DTO;
 using BoligInfo.Core.Enums;
 using BoligInfo.Core.Models;
+using BoligInfo.EquityRepository;
 using BoligInfo.LoanRepository;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace BoligInfo.LoanService;
 
-public class LoanService(ILoanRepository loanRepository) : ILoanService
+public class LoanService(ILoanRepository loanRepository, IEquityRepository equityRepository) : ILoanService
 {
     public async Task<IEnumerable<LoanDto>> GetAllLoansAsync()
     {
@@ -27,6 +29,10 @@ public class LoanService(ILoanRepository loanRepository) : ILoanService
 
     public async Task<LoanDto> CreateLoanAsync(CreateLoanDto createLoanDto)
     {
+        var equity = await equityRepository.GetByIdAsync(createLoanDto.EquityId);
+        if (equity == null) 
+            throw new KeyNotFoundException($"Equity {createLoanDto.EquityId} not found");
+        
         var loan = new Loan
         {
             LoanType = string.IsNullOrEmpty(createLoanDto.LoanType) 
@@ -35,11 +41,14 @@ public class LoanService(ILoanRepository loanRepository) : ILoanService
             LoanAmount = createLoanDto.LoanAmount,
             InterestRate = createLoanDto.InterestRate,
             LoanLifetime = createLoanDto.LoanLifetime,
-            EquityId = createLoanDto.EquityId
         };
+        
+        equity.Loans ??= new List<Loan>();
+        equity.Loans.Add(loan);
 
-        var createdLoan = await loanRepository.AddAsync(loan);
-        return MapToDto(createdLoan);
+        await loanRepository.SaveChangesAsync();
+        
+        return MapToDto(loan);
     }
 
     public async Task<LoanDto> UpdateLoanAsync(long id, UpdateLoanDto updateLoanDto)
@@ -60,12 +69,16 @@ public class LoanService(ILoanRepository loanRepository) : ILoanService
         if (updateLoanDto.LoanLifetime.HasValue)
             loan.LoanLifetime = updateLoanDto.LoanLifetime.Value;
 
-        await loanRepository.UpdateAsync(loan);
+        await loanRepository.SaveChangesAsync();
         return MapToDto(loan);
     }
 
     public async Task DeleteLoanAsync(long id)
     {
+        var exists = await loanRepository.ExistsAsync(id);
+        if (!exists)
+            throw new KeyNotFoundException($"Loan {id} not found");;
+
         await loanRepository.DeleteAsync(id);
     }
 

@@ -56,7 +56,14 @@ public class AllCashController(ICashService cashService) : ControllerBase, IAllC
     [HttpDelete("{id:long}")]
     public async Task<ActionResult> Delete(long id)
     {
-        await cashService.DeleteCashAsync(id);
-        return NoContent();
+        try
+        {
+            await cashService.DeleteCashAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 }

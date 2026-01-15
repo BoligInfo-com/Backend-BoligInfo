@@ -23,20 +23,7 @@ public class LoanRepository(BoligInfoDbContext context) : ILoanRepository
             .Where(l => l.EquityId == equityId)
             .ToListAsync();
     }
-
-    public async Task<Loan> AddAsync(Loan loan)
-    {
-        context.Loans.Add(loan);
-        await context.SaveChangesAsync();
-        return loan;
-    }
-
-    public async Task UpdateAsync(Loan loan)
-    {
-        context.Loans.Update(loan);
-        await context.SaveChangesAsync();
-    }
-
+    
     public async Task DeleteAsync(long id)
     {
         var loan = await context.Loans.FindAsync(id);
@@ -50,5 +37,10 @@ public class LoanRepository(BoligInfoDbContext context) : ILoanRepository
     public async Task<bool> ExistsAsync(long id)
     {
         return await context.Loans.AnyAsync(l => l.Id == id);
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
     }
 }

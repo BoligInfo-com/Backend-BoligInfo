@@ -56,7 +56,14 @@ public class LoansController(ILoanService loanService) : ControllerBase, ILoansC
     [HttpDelete("{id:long}")]
     public async Task<ActionResult> Delete(long id)
     {
-        await loanService.DeleteLoanAsync(id);
-        return NoContent();
+        try
+        {
+            await loanService.DeleteLoanAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 }
