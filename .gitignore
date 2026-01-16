@@ -484,3 +484,7 @@ $RECYCLE.BIN/
 *.swp
 src/Chirp.Web/Data/chirp.db-shm
 src/Chirp.Web/Data/chirp.db-wal
+
+# Test results & coverage
+TestResults/
+CoverageReport/
