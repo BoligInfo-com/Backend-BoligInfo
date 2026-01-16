@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Integration;
 
-public class EdgeCaseTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
+public class EdgeCaseTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
     [Fact]
     public async Task GetAll_ReturnsMultipleEquities_InCorrectFormat()

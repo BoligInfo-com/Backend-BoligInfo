@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Controllers;
 
-public class EquityControllerTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
+public class EquityControllerTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
     [Fact]
     public async Task GetAll_ReturnsEmptyList_WhenNoEquities()

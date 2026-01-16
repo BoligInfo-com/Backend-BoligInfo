@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Controllers;
 
-public class CashControllerTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
+public class CashControllerTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
     private async Task<long> CreateEquityAsync(string currency = "DKK")
     {

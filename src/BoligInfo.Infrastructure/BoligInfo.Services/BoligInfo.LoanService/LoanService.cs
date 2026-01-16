@@ -28,8 +28,9 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
 
     public async Task<LoanDto> CreateLoanAsync(CreateLoanDto createLoanDto)
     {
-        var equity = await equityRepository.GetByIdAsync(createLoanDto.EquityId);
-        if (equity == null) 
+        // Ensure parent Equity exists
+        var equityExists = await equityRepository.ExistsAsync(createLoanDto.EquityId);
+        if (!equityExists) 
             throw new KeyNotFoundException($"Equity {createLoanDto.EquityId} not found");
         
         var loan = new Loan
@@ -43,12 +44,8 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
             EquityId = createLoanDto.EquityId,
         };
         
-        equity.Loans ??= new List<Loan>();
-        equity.Loans.Add(loan);
-
-        await loanRepository.AddAsync(loan);
-        
-        return MapToDto(loan);
+        var createdLoan = await loanRepository.AddAsync(loan);
+        return MapToDto(createdLoan);
     }
 
     public async Task<LoanDto> UpdateLoanAsync(long id, UpdateLoanDto updateLoanDto)

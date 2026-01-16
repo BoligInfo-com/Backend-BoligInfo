@@ -27,6 +27,7 @@ public class CashEntityTypeConfiguration : IEntityTypeConfiguration<Cash>
             .HasOne<Equity>()
             .WithOne(e => e.Cash)
             .HasForeignKey<Cash>(c => c.EquityId)
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
         // Add check constraints

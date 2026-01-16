@@ -2,11 +2,10 @@
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
 using BoligInfo.Tests.Integration.Setup;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Validation;
 
-public class ValidationTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
+public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
     private async Task<long> CreateEquityAsync()
     {

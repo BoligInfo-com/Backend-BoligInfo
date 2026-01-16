@@ -50,20 +50,18 @@ public class EquityService(IEquityRepository equityRepository) : IEquityService
         if (updateEquityDto.Currency != null)
             equity.Currency = updateEquityDto.Currency;
 
-        await equityRepository.SaveChangesAsync();
+        await equityRepository.UpdateAsync(equity);
         return MapToDto(equity);
     }
 
     public async Task DeleteEquityAsync(long id)
     {
-        var equity = await equityRepository.GetByIdWithCashAsync(id);
-        if (equity == null)
+        var exists = await equityRepository.ExistsAsync(id);
+        if (!exists)
             throw new KeyNotFoundException($"Equity with ID {id} not found");
 
-        // Delete corresponding cash and loans
-        equity.Loans?.Clear();
-        equity.Cash = null;
-        
+        // The cascade delete is configured in the database,
+        // it should automatically delete loans and cash
         await equityRepository.DeleteAsync(id);
     }
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Integration;
 
-public class ReferentialIntegrityTests(WebApplicationFactory<Program> factory) : IntegrationTestBase(factory)
+public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
     [Fact]
     public async Task Delete_Equity_CascadesDeleteToLoans()
