@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj" />
+    <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.LoanRepository\BoligInfo.LoanRepository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

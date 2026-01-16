@@ -1,6 +1,6 @@
-﻿using BoligInfo.Core.DTOs;
+﻿using BoligInfo.Core.DTO;
 
-namespace BoligInfo.Services;
+namespace BoligInfo.LoanService;
 
 public interface ILoanService
 {

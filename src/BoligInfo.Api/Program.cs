@@ -1,29 +1,55 @@
+using Boliginfo.CashRepository;
+using BoligInfo.CashService;
+using BoligInfo.Core.Enums;
 using BoligInfo.Database;
 using BoligInfo.LoanRepository;
 using BoligInfo.EquityRepository;
-using BoligInfo.Services;
+using BoligInfo.EquityService;
+using BoligInfo.LoanService;
 
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Npgsql.NameTranslation;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// configure PostgreSQL if not in test environment
+if (!builder.Environment.EnvironmentName.Equals("Test", StringComparison.OrdinalIgnoreCase))
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+    dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
+    var dataSource = dataSourceBuilder.Build();
+    
+    // Add DbContext
+    builder.Services.AddDbContext<BoligInfoDbContext>(options =>
+        options.UseNpgsql(dataSource, o => o.MapEnum<LoanType>("LoanType")));
+}
+    
+
+
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.SuppressModelStateInvalidFilter = false;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
+builder.Services.AddLogging();
 
-// Add DbContext
-builder.Services.AddDbContext<BoligInfoDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register repositories
+// Register repositories & services for the scope of a request
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IEquityRepository, EquityRepository>();
-
-// Register services
+builder.Services.AddScoped<ICashRepository, CashRepository>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IEquityService, EquityService>();
+builder.Services.AddScoped<ICashService, CashService>();
+
 
 var app = builder.Build();
 
@@ -39,3 +65,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

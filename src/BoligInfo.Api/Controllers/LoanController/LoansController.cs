@@ -1,31 +1,24 @@
-﻿using BoligInfo.Core.DTOs;
-using BoligInfo.Services;
+﻿using BoligInfo.Core.DTO;
+using BoligInfo.LoanService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoligInfo.Api.Controllers;
+namespace BoligInfo.Api.Controllers.LoanController;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LoansController : ControllerBase
+public class LoansController(ILoanService loanService) : ControllerBase, ILoansController
 {
-    private readonly ILoanService _loanService;
-
-    public LoansController(ILoanService loanService)
-    {
-        _loanService = loanService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<LoanDto>>> GetAll()
     {
-        var loans = await _loanService.GetAllLoansAsync();
+        var loans = await loanService.GetAllLoansAsync();
         return Ok(loans);
     }
 
     [HttpGet("{id:long}")]
     public async Task<ActionResult<LoanDto>> GetById(long id)
     {
-        var loan = await _loanService.GetLoanByIdAsync(id);
+        var loan = await loanService.GetLoanByIdAsync(id);
         if (loan == null)
             return NotFound();
         
@@ -35,15 +28,23 @@ public class LoansController : ControllerBase
     [HttpGet("equity/{equityId:long}")]
     public async Task<ActionResult<IEnumerable<LoanDto>>> GetByEquityId(long equityId)
     {
-        var loans = await _loanService.GetLoansByEquityIdAsync(equityId);
+        var loans = await loanService.GetLoansByEquityIdAsync(equityId);
         return Ok(loans);
     }
 
     [HttpPost]
     public async Task<ActionResult<LoanDto>> Create(CreateLoanDto createLoanDto)
     {
-        var loan = await _loanService.CreateLoanAsync(createLoanDto);
-        return CreatedAtAction(nameof(GetById), new { id = loan.Id }, loan);
+        try
+        {
+            var loan = await loanService.CreateLoanAsync(createLoanDto);
+            return CreatedAtAction(nameof(GetById), new { id = loan.Id }, loan);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+
     }
 
     [HttpPut("{id:long}")]
@@ -51,7 +52,7 @@ public class LoansController : ControllerBase
     {
         try
         {
-            var loan = await _loanService.UpdateLoanAsync(id, updateLoanDto);
+            var loan = await loanService.UpdateLoanAsync(id, updateLoanDto);
             return Ok(loan);
         }
         catch (KeyNotFoundException)
@@ -63,7 +64,14 @@ public class LoansController : ControllerBase
     [HttpDelete("{id:long}")]
     public async Task<ActionResult> Delete(long id)
     {
-        await _loanService.DeleteLoanAsync(id);
-        return NoContent();
+        try
+        {
+            await loanService.DeleteLoanAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 }

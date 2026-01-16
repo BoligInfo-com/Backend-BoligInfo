@@ -4,7 +4,7 @@ namespace BoligInfo.Core.Models;
 
 public class Loan
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
     public LoanType? LoanType { get; set; }
     public double LoanAmount { get; set; }
     public double InterestRate { get; set; }

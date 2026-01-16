@@ -1,31 +1,24 @@
-﻿using BoligInfo.Core.DTOs;
-using BoligInfo.Services;
+﻿using BoligInfo.Core.DTO;
+using BoligInfo.EquityService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoligInfo.Api.Controllers;
+namespace BoligInfo.Api.Controllers.EquityController;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EquitiesController : ControllerBase
+public class EquitiesController(IEquityService equityService) : ControllerBase, IEquitiesController
 {
-    private readonly IEquityService _equityService;
-
-    public EquitiesController(IEquityService equityService)
-    {
-        _equityService = equityService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EquityDto>>> GetAll()
     {
-        var equities = await _equityService.GetAllEquitiesAsync();
+        var equities = await equityService.GetAllEquitiesAsync();
         return Ok(equities);
     }
 
     [HttpGet("{id:long}")]
     public async Task<ActionResult<EquityDto>> GetById(long id)
     {
-        var equity = await _equityService.GetEquityByIdAsync(id);
+        var equity = await equityService.GetEquityByIdAsync(id);
         if (equity == null)
             return NotFound();
         
@@ -35,7 +28,7 @@ public class EquitiesController : ControllerBase
     [HttpGet("{id:long}/with-loans")]
     public async Task<ActionResult<EquityDto>> GetByIdWithLoans(long id)
     {
-        var equity = await _equityService.GetEquityWithLoansAsync(id);
+        var equity = await equityService.GetEquityWithLoansAsync(id);
         if (equity == null)
             return NotFound();
         
@@ -45,8 +38,16 @@ public class EquitiesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<EquityDto>> Create(CreateEquityDto createEquityDto)
     {
-        var equity = await _equityService.CreateEquityAsync(createEquityDto);
-        return CreatedAtAction(nameof(GetById), new { id = equity.Id }, equity);
+        try
+        {
+            var equity = await equityService.CreateEquityAsync(createEquityDto);
+            return CreatedAtAction(nameof(GetById), new { id = equity.Id }, equity);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+
     }
 
     [HttpPut("{id:long}")]
@@ -54,7 +55,7 @@ public class EquitiesController : ControllerBase
     {
         try
         {
-            var equity = await _equityService.UpdateEquityAsync(id, updateEquityDto);
+            var equity = await equityService.UpdateEquityAsync(id, updateEquityDto);
             return Ok(equity);
         }
         catch (KeyNotFoundException)
@@ -66,7 +67,14 @@ public class EquitiesController : ControllerBase
     [HttpDelete("{id:long}")]
     public async Task<ActionResult> Delete(long id)
     {
-        await _equityService.DeleteEquityAsync(id);
-        return NoContent();
+        try
+        {
+            await equityService.DeleteEquityAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound();   
+        }
     }
 }
