@@ -39,6 +39,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
+builder.Services.AddLogging();
 
 
 // Register repositories & services for the scope of a request

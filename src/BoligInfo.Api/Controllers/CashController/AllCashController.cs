@@ -6,7 +6,10 @@ namespace BoligInfo.Api.Controllers.CashController;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AllCashController(ICashService cashService) : ControllerBase, IAllCashController
+public class AllCashController(
+    ICashService cashService, 
+    ILogger<AllCashController> logger
+    ) : ControllerBase, IAllCashController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CashDto>>> GetAll()
@@ -40,8 +43,9 @@ public class AllCashController(ICashService cashService) : ControllerBase, IAllC
             var cash = await cashService.CreateCashAsync(createCashDto);
             return CreatedAtAction(nameof(GetById), new { id = cash.Id }, cash);
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException e)
         {
+            logger.LogError(e.Message);
             return NotFound();
         }
     }
