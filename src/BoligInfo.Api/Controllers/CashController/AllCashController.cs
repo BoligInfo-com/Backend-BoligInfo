@@ -48,6 +48,11 @@ public class AllCashController(
             logger.LogError(e.Message);
             return NotFound();
         }
+        catch (InvalidOperationException e)
+        {
+            logger.LogError(e.Message);
+            return BadRequest();
+        }
     }
 
     [HttpPut("{id:long}")]

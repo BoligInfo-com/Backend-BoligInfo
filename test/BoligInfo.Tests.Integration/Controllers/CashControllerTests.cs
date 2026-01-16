@@ -94,29 +94,51 @@ public class CashControllerTests(CustomWebApplicationFactory factory) : Integrat
     }
 
     [Fact]
-    public async Task GetByEquityId_ReturnsAllCashForEquity()
+    public async Task GetByEquityId_ReturnsSingleCashForEquity()
     {
         var equityId = await CreateEquityAsync();
-        
-        await Client.PostAsJsonAsync("/api/allcash", new CreateCashDto
+    
+        var createCashDto = new CreateCashDto
         {
             EquityId = equityId,
-            CashAmount = 25000.0
-        });
-        
-        await Client.PostAsJsonAsync("/api/allcash", new CreateCashDto
-        {
-            EquityId = equityId,
-            CashAmount = 35000.0
-        });
+            CashAmount = 50000.0
+        };
+        await Client.PostAsJsonAsync("/api/allcash", createCashDto);
 
         var response = await Client.GetAsync($"/api/allcash/equity/{equityId}");
 
         response.EnsureSuccessStatusCode();
         var cashRecords = await response.Content.ReadFromJsonAsync<IEnumerable<CashDto>>();
         Assert.NotNull(cashRecords);
-        Assert.Equal(2, cashRecords.Count());
-        Assert.All(cashRecords, c => Assert.Equal(equityId, c.EquityId));
+        Assert.Single(cashRecords);
+        Assert.Equal(equityId, cashRecords.First().EquityId);
+        Assert.Equal(50000.0, cashRecords.First().CashAmount);
+    }
+    
+    [Fact]
+    public async Task Create_RejectsSecondCash_WhenEquityAlreadyHasCash()
+    {
+        var equityId = await CreateEquityAsync();
+    
+        // Create first cash - should succeed
+        var firstCashDto = new CreateCashDto
+        {
+            EquityId = equityId,
+            CashAmount = 25000.0
+        };
+        var firstResponse = await Client.PostAsJsonAsync("/api/allcash", firstCashDto);
+        firstResponse.EnsureSuccessStatusCode();
+    
+        // Try to create second cash for same equity - should fail
+        var secondCashDto = new CreateCashDto
+        {
+            EquityId = equityId,
+            CashAmount = 35000.0
+        };
+        var secondResponse = await Client.PostAsJsonAsync("/api/allcash", secondCashDto);
+
+        Assert.False(secondResponse.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
 
     [Fact]
@@ -189,6 +211,6 @@ public class CashControllerTests(CustomWebApplicationFactory factory) : Integrat
     {
         var response = await Client.DeleteAsync("/api/allcash/99999");
 
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }
