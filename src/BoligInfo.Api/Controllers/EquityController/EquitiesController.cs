@@ -67,7 +67,14 @@ public class EquitiesController(IEquityService equityService) : ControllerBase, 
     [HttpDelete("{id:long}")]
     public async Task<ActionResult> Delete(long id)
     {
-        await equityService.DeleteEquityAsync(id);
-        return NoContent();
+        try
+        {
+            await equityService.DeleteEquityAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound();   
+        }
     }
 }

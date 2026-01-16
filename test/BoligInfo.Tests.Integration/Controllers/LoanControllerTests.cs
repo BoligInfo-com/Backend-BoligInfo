@@ -334,6 +334,6 @@ public class LoanControllerTests(CustomWebApplicationFactory factory) : Integrat
     {
         var response = await Client.DeleteAsync("/api/loans/99999");
 
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }
