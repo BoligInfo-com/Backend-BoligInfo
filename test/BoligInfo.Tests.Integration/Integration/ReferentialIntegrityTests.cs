@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
 using BoligInfo.Tests.Integration.Setup;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Integration;
 
@@ -93,18 +92,14 @@ public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : In
         var equityResponse = await Client.PostAsJsonAsync("/api/equities", createEquityDto);
         var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
 
-        var cash1Response = await Client.PostAsJsonAsync("/api/allcash", new CreateCashDto
+        // Create single cash for this equity (one-to-one relationship)
+        var cashResponse = await Client.PostAsJsonAsync("/api/allcash", new CreateCashDto
         {
             EquityId = equity!.Id,
-            CashAmount = 15000.0
-        });
-        
-        var cash2Response = await Client.PostAsJsonAsync("/api/allcash", new CreateCashDto
-        {
-            EquityId = equity.Id,
-            CashAmount = 25000.0
+            CashAmount = 40000.0
         });
 
+        // Create multiple loans for this equity (one-to-many relationship)
         var loan1Response = await Client.PostAsJsonAsync("/api/loans", new CreateLoanDto
         {
             EquityId = equity.Id,
@@ -123,17 +118,20 @@ public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : In
             LoanLifetime = 20
         });
 
-        cash1Response.EnsureSuccessStatusCode();
-        cash2Response.EnsureSuccessStatusCode();
+        // Verify all operations succeeded
+        cashResponse.EnsureSuccessStatusCode();
         loan1Response.EnsureSuccessStatusCode();
         loan2Response.EnsureSuccessStatusCode();
 
+        // Verify the data was created correctly
         var cashRecords = await Client.GetFromJsonAsync<IEnumerable<CashDto>>($"/api/allcash/equity/{equity.Id}");
         var loanRecords = await Client.GetFromJsonAsync<IEnumerable<LoanDto>>($"/api/loans/equity/{equity.Id}");
-        
-        Assert.Equal(2, cashRecords!.Count());
-        Assert.Equal(2, loanRecords!.Count());
-        Assert.Equal(40000.0, cashRecords.Sum(c => c.CashAmount));
+    
+        Assert.NotNull(cashRecords);
+        Assert.NotNull(loanRecords);
+        Assert.Single(cashRecords); // One-to-one: only one cash per equity
+        Assert.Equal(2, loanRecords.Count()); // One-to-many: multiple loans per equity
+        Assert.Equal(40000.0, cashRecords.First().CashAmount);
         Assert.Equal(800000.0, loanRecords.Sum(l => l.LoanAmount));
     }
 

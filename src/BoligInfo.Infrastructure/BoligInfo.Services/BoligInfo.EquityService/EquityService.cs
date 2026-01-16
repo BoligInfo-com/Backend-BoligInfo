@@ -1,10 +1,16 @@
-﻿using BoligInfo.Core.DTO;
+﻿using Boliginfo.CashRepository;
+using BoligInfo.Core.DTO;
 using BoligInfo.Core.Models;
 using BoligInfo.EquityRepository;
+using BoligInfo.LoanRepository;
 
 namespace BoligInfo.EquityService;
 
-public class EquityService(IEquityRepository equityRepository) : IEquityService
+public class EquityService(
+    IEquityRepository equityRepository,
+    ILoanRepository loanRepository,
+    ICashRepository cashRepository
+    ) : IEquityService
 {
     public async Task<IEnumerable<EquityDto>> GetAllEquitiesAsync()
     {
@@ -56,12 +62,30 @@ public class EquityService(IEquityRepository equityRepository) : IEquityService
 
     public async Task DeleteEquityAsync(long id)
     {
-        var exists = await equityRepository.ExistsAsync(id);
-        if (!exists)
+        var equity = await equityRepository.GetByIdWithLoansAsync(id);
+        if (equity == null)
             throw new KeyNotFoundException($"Equity with ID {id} not found");
+
+        // Manually delete related entities for in-memory database
+        // (Real database would handle this via cascade delete configuration)
+        if (equity.Loans != null && equity.Loans.Count != 0)
+        {
+            foreach (var loan in equity.Loans.ToList())
+            {
+                await loanRepository.DeleteAsync(loan.Id);
+            }
+        }
+        
+        // Delete cash if exists (need to get equity with cash)
+        var equityWithCash = await equityRepository.GetByIdWithCashAsync(id);
+        if (equityWithCash?.Cash != null)
+        {
+            await cashRepository.DeleteAsync(equityWithCash.Cash.Id);
+        }
 
         // The cascade delete is configured in the database,
         // it should automatically delete loans and cash
+        // In the production database
         await equityRepository.DeleteAsync(id);
     }
 

@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
 using BoligInfo.Tests.Integration.Setup;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Integration;
 
