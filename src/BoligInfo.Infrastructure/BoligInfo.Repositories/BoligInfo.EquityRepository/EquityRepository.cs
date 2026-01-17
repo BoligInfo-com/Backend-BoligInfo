@@ -7,6 +7,7 @@ namespace BoligInfo.EquityRepository;
 
 public class EquityRepository(BoligInfoDbContext context) : IEquityRepository
 {
+    // ==================== GET ENDPOINT(S) ==================== //
     public async Task<IEnumerable<Equity>> GetAllAsync()
     {
         return await context.Equities.ToListAsync();
@@ -31,6 +32,7 @@ public class EquityRepository(BoligInfoDbContext context) : IEquityRepository
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
+    // ==================== POST ENDPOINT(S) ==================== //
     public async Task<Equity> AddAsync(Equity equity)
     {
         context.Equities.Add(equity);
@@ -38,12 +40,14 @@ public class EquityRepository(BoligInfoDbContext context) : IEquityRepository
         return equity;
     }
 
+    // ==================== PUT ENDPOINT(S) ==================== //
     public async Task UpdateAsync(Equity equity)
     {
         context.Equities.Update(equity);
         await context.SaveChangesAsync();
     }
 
+    // ==================== DELETE ENDPOINT(S) ==================== //
     public async Task DeleteAsync(long id)
     {
         var equity = await context.Equities.FindAsync(id);
@@ -54,6 +58,7 @@ public class EquityRepository(BoligInfoDbContext context) : IEquityRepository
         }
     }
     
+    // ==================== FUNCTIONS ==================== //
     public async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();

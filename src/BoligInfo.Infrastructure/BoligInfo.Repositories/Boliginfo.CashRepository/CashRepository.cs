@@ -6,6 +6,8 @@ namespace Boliginfo.CashRepository;
 
 public class CashRepository(BoligInfoDbContext context) : ICashRepository
 {
+    
+    // ==================== GET ENDPOINT(S) ==================== //
     public async Task<IEnumerable<Cash>> GetAllAsync()
     {
         return await context.AllCash.ToListAsync();
@@ -23,19 +25,22 @@ public class CashRepository(BoligInfoDbContext context) : ICashRepository
             .ToListAsync();
     }
     
+    // ==================== POST ENDPOINT(S) ==================== //
     public async Task<Cash> AddAsync(Cash cash)
     {
         context.AllCash.Add(cash);
         await context.SaveChangesAsync();
         return cash;
     }
-
+    
+    // ==================== PUT ENDPOINT(S) ==================== //
     public async Task UpdateAsync(Cash cash)
     {
         context.AllCash.Update(cash);
         await context.SaveChangesAsync();
     }
-
+    
+    // ==================== DELETE ENDPOINT(S) ==================== //
     public async Task DeleteAsync(long id)
     {
         var cash = await context.AllCash.FindAsync(id);
@@ -45,7 +50,8 @@ public class CashRepository(BoligInfoDbContext context) : ICashRepository
             await context.SaveChangesAsync();
         }
     }
-
+    
+    // ==================== FUNCTIONS ==================== //
     public async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();
