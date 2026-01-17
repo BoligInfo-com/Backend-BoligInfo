@@ -1,3 +1,5 @@
+[![ASP.NET Core Application test with Github Actions](https://github.com/BoligInfo-com/Backend-BoligInfo/actions/workflows/dotnet.yml/badge.svg)](https://github.com/BoligInfo-com/Backend-BoligInfo/actions/workflows/dotnet.yml)
+
 # BoligInfo API
 
 BoligInfo is an **ASP.NET Core Minimal API** backend for managing financial data related to equity, loans, and cash. The project provides RESTful endpoints for creating, reading, updating, and deleting financial entities. The API uses **PostgreSQL** as its database and leverages **Entity Framework Core** for ORM.  
