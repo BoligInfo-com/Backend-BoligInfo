@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BoligInfo.Database;
 
+/// <summary>
+/// Entity type configuration for the <see cref="Cash"/> entity.
+/// Sets table name, keys, properties, constraints, and relationships.
+/// </summary>
 public class CashEntityTypeConfiguration : IEntityTypeConfiguration<Cash>
 {
     public void Configure(EntityTypeBuilder<Cash> builder)
