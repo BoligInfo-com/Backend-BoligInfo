@@ -23,8 +23,10 @@
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Database\BoligInfo.Database.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.LoanRepository\BoligInfo.LoanRepository.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.CashFlowService\BoligInfo.CashFlowService.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.CashService\BoligInfo.CashService.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.EquityService\BoligInfo.EquityService.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.HouseService\BoligInfo.HouseService.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.LoanService\BoligInfo.LoanService.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.CashRepository\BoligInfo.CashRepository.csproj" />
     <ProjectReference Include="..\BoligInfo.Core\BoligInfo.Core.csproj" />

@@ -25,4 +25,5 @@ public class Equity
     /// Collection of loans associated with the equity.
     /// </summary>
     public ICollection<Loan>? Loans { get; set; }
+    public ICollection<House>? Houses { get; set; }
 }

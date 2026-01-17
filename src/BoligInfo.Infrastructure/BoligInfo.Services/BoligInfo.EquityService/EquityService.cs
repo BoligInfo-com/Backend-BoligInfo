@@ -2,6 +2,8 @@
 using BoligInfo.Core.DTO;
 using BoligInfo.Core.Models;
 using BoligInfo.EquityRepository;
+using BoligInfo.HouseRepository;
+using BoligInfo.HouseService;
 using BoligInfo.LoanRepository;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +17,8 @@ public class EquityService(
     IEquityRepository equityRepository,
     ILoanRepository loanRepository,
     ICashRepository cashRepository,
+    IHouseRepository houseRepository,
+    IHouseService houseService,
     ILogger<EquityService> logger
     ) : IEquityService
 {
@@ -131,6 +135,17 @@ public class EquityService(
             foreach (var loan in equity.Loans.ToList())
             {
                 await loanRepository.DeleteAsync(loan.Id);
+            }
+        }
+        
+        // Delete all houses (and their cash flows will cascade)
+        var houses = await houseRepository.GetByEquityIdAsync(id);
+        var enumerable = houses.ToList();
+        if (enumerable.Count != 0)
+        {
+            foreach (var house in enumerable.ToList())
+            {
+                await houseService.DeleteHouseAsync(house.Id);
             }
         }
         

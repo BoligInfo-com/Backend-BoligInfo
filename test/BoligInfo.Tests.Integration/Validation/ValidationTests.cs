@@ -15,6 +15,149 @@ public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationT
         return equity!.Id;
     }
 
+    private async Task<long> CreateHouseAsync(long equityId)
+    {
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = 2000000.0
+        };
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+        var house = await response.Content.ReadFromJsonAsync<HouseDto>();
+        return house!.Id;
+    }
+    
+    [Theory]
+    [InlineData(-1000000.0)]
+    [InlineData(-0.01)]
+    public async Task House_RejectsNegativePrice(double price)
+    {
+        var equityId = await CreateEquityAsync();
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = price
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Theory]
+    [InlineData(0.0)]
+    [InlineData(1000000.0)]
+    [InlineData(999999999.99)]
+    public async Task House_AcceptsValidPrices(double price)
+    {
+        var equityId = await CreateEquityAsync();
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = price
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public async Task House_RejectsNegativeNumberOfRooms(int rooms)
+    {
+        var equityId = await CreateEquityAsync();
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = 2000000.0,
+            NumberOfRooms = rooms
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(10)]
+    [InlineData(100)]
+    public async Task House_AcceptsValidNumberOfRooms(int rooms)
+    {
+        var equityId = await CreateEquityAsync();
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = 2000000.0,
+            NumberOfRooms = rooms
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-500)]
+    public async Task House_RejectsNegativeSquareMeters(int sqm)
+    {
+        var equityId = await CreateEquityAsync();
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = 2000000.0,
+            SquareMeters = sqm
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(50)]
+    [InlineData(500)]
+    public async Task House_AcceptsValidSquareMeters(int sqm)
+    {
+        var equityId = await CreateEquityAsync();
+        var createDto = new CreateHouseDto
+        {
+            EquityId = equityId,
+            Price = 2000000.0,
+            SquareMeters = sqm
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/houses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Theory]
+    [InlineData(-1000.0)]
+    [InlineData(-0.01)]
+    public async Task CashFlow_RejectsNegativeAmount(double amount)
+    {
+        var equityId = await CreateEquityAsync();
+        var houseId = await CreateHouseAsync(equityId);
+        var createDto = new CreateCashFlowDto
+        {
+            HouseId = houseId,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = amount,
+            Name = "Test"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/cashflows", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
     [Theory]
     [InlineData(-1000.0)]
     [InlineData(-0.01)]
@@ -33,6 +176,88 @@ public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationT
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+    
+    [Theory]
+    [InlineData(0.0)]
+    [InlineData(1000.0)]
+    [InlineData(999999999.99)]
+    public async Task CashFlow_AcceptsValidAmounts(double amount)
+    {
+        var equityId = await CreateEquityAsync();
+        var houseId = await CreateHouseAsync(equityId);
+        var createDto = new CreateCashFlowDto
+        {
+            HouseId = houseId,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = amount,
+            Name = "Test"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/cashflows", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task CashFlow_RejectsNameLongerThan60Characters()
+    {
+        var equityId = await CreateEquityAsync();
+        var houseId = await CreateHouseAsync(equityId);
+        var createDto = new CreateCashFlowDto
+        {
+            HouseId = houseId,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = 5000.0,
+            Name = new string('A', 61)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/cashflows", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task CashFlow_AcceptsNameUpTo60Characters()
+    {
+        var equityId = await CreateEquityAsync();
+        var houseId = await CreateHouseAsync(equityId);
+        var createDto = new CreateCashFlowDto
+        {
+            HouseId = houseId,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = 5000.0,
+            Name = new string('A', 60)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/cashflows", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task CashFlow_RejectsDescriptionLongerThan1400Characters()
+    {
+        var equityId = await CreateEquityAsync();
+        var houseId = await CreateHouseAsync(equityId);
+        var createDto = new CreateCashFlowDto
+        {
+            HouseId = houseId,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = 5000.0,
+            Name = "Test",
+            Description = new string('B', 1401)
+        };
+        
+        var response = await Client.PostAsJsonAsync("/api/cashflows", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    
 
     [Theory]
     [InlineData(0)]
@@ -53,7 +278,27 @@ public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationT
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+    
+    [Fact]
+    public async Task CashFlow_AcceptsDescriptionUpTo1400Characters()
+    {
+        var equityId = await CreateEquityAsync();
+        var houseId = await CreateHouseAsync(equityId);
+        var createDto = new CreateCashFlowDto
+        {
+            HouseId = houseId,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = 5000.0,
+            Name = "Test",
+            Description = new string('B', 1400)
+        };
 
+        var response = await Client.PostAsJsonAsync("/api/cashflows", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
     [Theory]
     [InlineData(0.0)]
     [InlineData(100000.0)]
