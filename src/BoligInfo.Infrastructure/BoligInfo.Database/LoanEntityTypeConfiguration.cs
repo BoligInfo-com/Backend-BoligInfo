@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BoligInfo.Database;
 
+/// <summary>
+/// Entity type configuration for the <see cref="Loan"/> entity.
+/// Sets table name, keys, properties, foreign key relationships, and constraints.
+/// </summary>
 public class LoanEntityTypeConfiguration : IEntityTypeConfiguration<Loan>
 {
     public void Configure(EntityTypeBuilder<Loan> builder)
