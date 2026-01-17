@@ -25,12 +25,24 @@ if (!builder.Environment.EnvironmentName.Equals("Test", StringComparison.Ordinal
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+    
+    // Map C# Enums to PostgresSQL Enum types
     dataSourceBuilder.MapEnum<LoanType>("LoanType", new NpgsqlNullNameTranslator());
+    dataSourceBuilder.MapEnum<EnergyLabel>("EnergyLabel", new NpgsqlNullNameTranslator());
+    dataSourceBuilder.MapEnum<Frequency>("Frequency", new NpgsqlNullNameTranslator());
+    dataSourceBuilder.MapEnum<CashFlowType>("CashFlowType", new NpgsqlNullNameTranslator());
+    
     var dataSource = dataSourceBuilder.Build();
     
     // Add DbContext
     builder.Services.AddDbContext<BoligInfoDbContext>(options =>
-        options.UseNpgsql(dataSource, o => o.MapEnum<LoanType>("LoanType")));
+        options.UseNpgsql(dataSource, o =>
+        {
+            o.MapEnum<LoanType>("LoanType");
+            o.MapEnum<EnergyLabel>("EnergyLabel");
+            o.MapEnum<Frequency>("Frequency");
+            o.MapEnum<CashFlowType>("CashFlowType");
+        }));
 }
     
 
