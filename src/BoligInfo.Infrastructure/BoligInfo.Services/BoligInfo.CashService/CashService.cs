@@ -7,6 +7,7 @@ namespace BoligInfo.CashService;
 
 public class CashService(ICashRepository cashRepository, IEquityRepository equityRepository) : ICashService
 {
+    
     public async Task<IEnumerable<CashDto>> GetAllCashAsync()
     {
         var allCash = await cashRepository.GetAllAsync();

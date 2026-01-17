@@ -7,7 +7,7 @@ namespace BoligInfo.LoanRepository;
 
 public class LoanRepository(BoligInfoDbContext context) : ILoanRepository
 {
-    // ==================== GET ENDPOINT(S) ==================== //
+    // ==================== GET QUERIES ==================== //
     public async Task<IEnumerable<Loan>> GetAllAsync()
     {
         return await context.Loans.ToListAsync();
@@ -25,7 +25,7 @@ public class LoanRepository(BoligInfoDbContext context) : ILoanRepository
             .ToListAsync();
     }
     
-    // ==================== POST ENDPOINT(S) ==================== //
+    // ==================== POST QUERIES ==================== //
     public async Task<Loan> AddAsync(Loan loan)
     {
         context.Loans.Add(loan);
@@ -33,14 +33,14 @@ public class LoanRepository(BoligInfoDbContext context) : ILoanRepository
         return loan;
     }
 
-    // ==================== PUT ENDPOINT(S) ==================== //
+    // ==================== PUT QUERIES ==================== //
     public async Task UpdateAsync(Loan loan)
     {
         context.Loans.Update(loan);
         await context.SaveChangesAsync();
     }
     
-    // ==================== DELETE ENDPOINT(S) ==================== //
+    // ==================== DELETE QUERIES ==================== //
     public async Task DeleteAsync(long id)
     {
         var loan = await context.Loans.FindAsync(id);
