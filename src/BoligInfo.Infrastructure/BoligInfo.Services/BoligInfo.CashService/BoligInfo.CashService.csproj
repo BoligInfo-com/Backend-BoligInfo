@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BoligInfo.Repositories\Boliginfo.CashRepository_temp\Boliginfo.CashRepository_temp.csproj" />
+    <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.CashRepository\BoligInfo.CashRepository.csproj" />
     <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj" />
   </ItemGroup>
 

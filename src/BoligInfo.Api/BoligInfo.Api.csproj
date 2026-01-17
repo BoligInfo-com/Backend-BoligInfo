@@ -26,7 +26,7 @@
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.CashService\BoligInfo.CashService.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.EquityService\BoligInfo.EquityService.csproj" />
     <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Services\BoligInfo.LoanService\BoligInfo.LoanService.csproj" />
-    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\Boliginfo.CashRepository_temp\Boliginfo.CashRepository_temp.csproj" />
+    <ProjectReference Include="..\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.CashRepository\BoligInfo.CashRepository.csproj" />
     <ProjectReference Include="..\BoligInfo.Core\BoligInfo.Core.csproj" />
   </ItemGroup>
 

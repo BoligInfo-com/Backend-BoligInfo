@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.LoanRepository", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.EquityRepository", "src\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj", "{4085A3C9-38BB-4EDB-A524-B0EACFC45E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boliginfo.CashRepository_temp", "src\BoligInfo.Infrastructure\BoligInfo.Repositories\Boliginfo.CashRepository_temp\Boliginfo.CashRepository_temp.csproj", "{8C93BA88-AA1A-4349-B195-4E4DE25FF754}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligInfo.CashRepository", "src\BoligInfo.Infrastructure\BoligInfo.Repositories\BoligInfo.CashRepository\BoligInfo.CashRepository.csproj", "{8C93BA88-AA1A-4349-B195-4E4DE25FF754}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoligInfo.Services", "BoligInfo.Services", "{3756C3E6-9636-8392-5FF0-4498A42E6C34}"
 EndProject
