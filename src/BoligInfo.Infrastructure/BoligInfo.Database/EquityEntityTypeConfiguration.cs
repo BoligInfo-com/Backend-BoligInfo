@@ -4,6 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BoligInfo.Database;
 
+
+/// <summary>
+/// Entity type configuration for the <see cref="Equity"/> entity.
+/// Sets table name, keys, and property constraints.
+/// </summary>
 public class EquityEntityTypeConfiguration : IEntityTypeConfiguration<Equity> 
 {
     public void Configure(EntityTypeBuilder<Equity> builder)
