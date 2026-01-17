@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
+      
+    <!-- Generate XML documentation for Swagger -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- optional: ignore missing XML comments warnings -->
+    <NoWarn>$(NoWarn);1591</NoWarn> 
+      
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d7c1fe20-0107-43a2-a99c-758222415efd</UserSecretsId>
   </PropertyGroup>
