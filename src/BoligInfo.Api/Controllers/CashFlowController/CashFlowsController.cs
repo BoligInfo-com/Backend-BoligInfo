@@ -21,7 +21,7 @@ public class CashFlowsController(ICashFlowService cashFlowService) : ControllerB
         var cashFlow = await cashFlowService.GetCashFlowByIdAsync(id);
         if (cashFlow == null)
             return NotFound();
-        
+
         return Ok(cashFlow);
     }
 
@@ -73,3 +73,4 @@ public class CashFlowsController(ICashFlowService cashFlowService) : ControllerB
             return NotFound();
         }
     }
+}
