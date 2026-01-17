@@ -257,8 +257,6 @@ public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationT
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
     
-    
-
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
