@@ -1,4 +1,5 @@
 using System.Reflection;
+using BoligInfo.CashFlowRepository;
 using Boliginfo.CashRepository;
 using BoligInfo.CashService;
 using BoligInfo.Core.Enums;
@@ -6,6 +7,7 @@ using BoligInfo.Database;
 using BoligInfo.LoanRepository;
 using BoligInfo.EquityRepository;
 using BoligInfo.EquityService;
+using BoligInfo.HouseRepository;
 using BoligInfo.LoanService;
 
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +57,8 @@ builder.Services.AddScoped<ICashRepository, CashRepository>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IEquityService, EquityService>();
 builder.Services.AddScoped<ICashService, CashService>();
+builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+builder.Services.AddScoped<ICashFlowRepository, CashFlowRepository>();
 
 
 var app = builder.Build();
