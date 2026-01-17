@@ -1,66 +1,135 @@
-# BoligInfo
+# BoligInfo API
 
-A house investment management API built with ASP.NET Core for tracking property equity and associated loans.
+BoligInfo is an **ASP.NET Core Minimal API** backend for managing financial data related to equity, loans, and cash. The project provides RESTful endpoints for creating, reading, updating, and deleting financial entities. The API uses **PostgreSQL** as its database and leverages **Entity Framework Core** for ORM.  
 
-## Tech Stack
+---
 
-- **Framework**: ASP.NET Core 9.0
-- **Database**: PostgreSQL
-- **ORM**: Entity Framework Core
-- **Architecture**: Clean Architecture (API → Services → Repositories → Database)
+## Features
+
+- CRUD operations for:
+  - **Loans**
+  - **Equities**
+  - **Cash**
+- One-to-one and one-to-many relationships enforced in the database
+- Validation on creation and updates
+- Logging for error handling
+- Swagger/OpenAPI documentation fully integrated
+- XML documentation for enhanced API descriptions
+
+---
+
+## Technologies
+
+- **Backend:** ASP.NET Core 9.0 Minimal API  
+- **Database:** PostgreSQL (via Npgsql)  
+- **ORM:** Entity Framework Core  
+- **Logging:** Microsoft.Extensions.Logging  
+- **API Documentation:** Swagger / Swashbuckle  
+
+---
+
+## Project Structure
+
 
 ## Project Structure
 ```
 BoligInfo/
 ├── src/
-│   ├── BoligInfo.Core/              # Domain models, DTOs, enums
-│   ├── BoligInfo.Infrastructure/
-│   │   ├── BoligInfo.Database/      # DbContext, EF configurations
-│   │   ├── BoligInfo.Repositories/  # Data access layer
-│   │   │   ├── BoligInfo.LoanRepository/
-│   │   │   └── BoligInfo.EquityRepository/
-│   │   └── BoligInfo.Services/      # Business logic
-|   |       ├── BoligInfo.LoanService/
-|   |       └── BoligInfo.EquityService/
-│   └── BoligInfo.Api/               # REST API endpoints
+| ├─ BoligInfo.Api # API controllers and Program.cs
+| ├─ BoligInfo.Core # DTOs, Models, Enums
+| ├─ BoligInfo.Database # DbContext and Entity configurations
+| ├─ BoligInfo.Repositories # Repositories for Loan, Equity, Cash
+| ├─ BoligInfo.Services # Services implementing business logic
+├── test/
 ```
 
-## Features
-
-- **Equity Management**: Track property investments in multiple currencies
-- **Loan Management**: Manage various loan types (Fixed, Adjustable, F1-F5)
-- **RESTful API**: Full CRUD operations for equities and loans
-- **Foreign Key Relations**: Loans linked to equity with cascade delete
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- .NET 9.0 SDK
-- PostgreSQL
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [PostgreSQL](https://www.postgresql.org/download/)
+- Optional: Visual Studio Code or Visual Studio
+### Setup
 
-## API Endpoints
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/BoligInfo.git
+   cd BoligInfo/src/BoligInfo.Api
+   ```
+   
+2. Configure PostgreSQL connection string in appsettings.json:
+  ```json
+  {
+    "ConnectionStrings": {
+      "DefaultConnection": "Host=localhost;Database=DBNAME;Username=YOUR_USER_NAME;Password=YOUR_PASSWORD"
+    }
+  }
+  ```
+  
+3. Apply database migrations:
+  ```bash
+  dotnet ef database update
+  ```
 
-### Equities
-- `GET /api/equities` - Get all equities
-- `GET /api/equities/{id}` - Get equity by ID
-- `GET /api/equities/{id}/with-loans` - Get equity with associated loans
-- `POST /api/equities` - Create new equity
-- `PUT /api/equities/{id}` - Update equity
-- `DELETE /api/equities/{id}` - Delete equity
+4. Run the API:
+  ```bash
+  dotnet run
+  ```
+  
+5. Access Swagger UI:
+  ```bash
+ https://localhost:YOURPORT/swagger
+  ```
 
-### Loans
-- `GET /api/loans` - Get all loans
-- `GET /api/loans/{id}` - Get loan by ID
-- `GET /api/loans/equity/{equityId}` - Get loans by equity
-- `POST /api/loans` - Create new loan
-- `PUT /api/loans/{id}` - Update loan
-- `DELETE /api/loans/{id}` - Delete loan
+---
 
-## Testing
+# Usage
 
-HTTP test files available in `src/BoligInfo.Api/HttpTests/`:
-- `loans.http` - Loan endpoint tests
-- `equities.http` - Equity endpoint tests
+- **Loans**
+  - GET /api/loans
+  - GET /api/loans/{id}
+  - POST /api/loans
+  - PUT /api/loans/{id}
+  - DELETE /api/loans/{id}
 
-Use REST Client extension in VS Code or run directly in Visual Studio/Rider.
+- **Equities**
+  - GET /api/equities
+  - GET /api/equities/{id}
+  - GET /api/equities/{id}/with-loans
+  - POST /api/equities
+  - PUT /api/equities/{id}
+  - DELETE /api/equities/{id}
+
+- **Cash**
+  - GET /api/allcash
+  - GET /api/allcash/{id}
+  - GET /api/allcash/equity/{equityId}
+  - POST /api/allcash
+  - PUT /api/allcash/{id}
+  - DELETE /api/allcash/{id}
+
+---
+
+# Logging
+- Errors in Service classes are logged using ILogger.
+- You can extend logging for other services or controllers as needed
+
+---
+
+# Notes
+- The API uses XML documentation comments (`<summary>, <param>, <returns>`) to enhance Swagger UI.
+- One-to-one relationships (Equity → Cash) and one-to-many relationships (Equity → Loans) are enforced both in C# and PostgreSQL.
+
+---
+
+# Contributing
+1. Fork the repositor
+2. Create a branch for your feature (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
+
+---
