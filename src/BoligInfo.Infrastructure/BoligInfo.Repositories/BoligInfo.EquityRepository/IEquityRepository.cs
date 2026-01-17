@@ -10,7 +10,7 @@ public interface IEquityRepository
     Task<Equity?> GetByIdWithCashAsync(long id);
     Task<Equity> AddAsync(Equity equity);
     Task UpdateAsync(Equity equity);
-    Task SaveChangesAsync();
     Task DeleteAsync(long id);
+    Task SaveChangesAsync();
     Task<bool> ExistsAsync(long id);
 }

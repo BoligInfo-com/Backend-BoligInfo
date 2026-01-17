@@ -23,7 +23,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
     public async Task<IEnumerable<LoanDto>> GetLoansByEquityIdAsync(long equityId)
     {
         var loans = await loanRepository.GetByEquityIdAsync(equityId);
-        return loans?.Select(MapToDto) ?? [];
+        return loans.Select(MapToDto);
     }
 
     public async Task<LoanDto> CreateLoanAsync(CreateLoanDto createLoanDto)
@@ -74,7 +74,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
     {
         var exists = await loanRepository.ExistsAsync(id);
         if (!exists)
-            throw new KeyNotFoundException($"Loan {id} not found");;
+            throw new KeyNotFoundException($"Loan {id} not found");
 
         await loanRepository.DeleteAsync(id);
     }

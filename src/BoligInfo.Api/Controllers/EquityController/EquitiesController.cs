@@ -72,7 +72,7 @@ public class EquitiesController(IEquityService equityService) : ControllerBase, 
             await equityService.DeleteEquityAsync(id);
             return NoContent();
         }
-        catch (KeyNotFoundException e)
+        catch (KeyNotFoundException)
         {
             return NotFound();   
         }

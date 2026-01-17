@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
 using BoligInfo.Tests.Integration.Setup;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Controllers;
 
@@ -217,9 +216,11 @@ public class LoanControllerTests(CustomWebApplicationFactory factory) : Integrat
 
         response.EnsureSuccessStatusCode();
         var loans = await response.Content.ReadFromJsonAsync<IEnumerable<LoanDto>>();
+        var loanDtos = loans!.ToList();
+        
         Assert.NotNull(loans);
-        Assert.Equal(2, loans.Count());
-        Assert.All(loans, l => Assert.Equal(equityId, l.EquityId));
+        Assert.Equal(2, loanDtos.Count);
+        Assert.All(loanDtos, l => Assert.Equal(equityId, l.EquityId));
     }
 
     [Fact]

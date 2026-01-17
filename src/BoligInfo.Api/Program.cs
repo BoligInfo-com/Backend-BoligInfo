@@ -15,7 +15,7 @@ using Npgsql.NameTranslation;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// configure PostgreSQL if not in test environment
+// configure PostgresSQL if not in test environment
 if (!builder.Environment.EnvironmentName.Equals("Test", StringComparison.OrdinalIgnoreCase))
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

@@ -92,7 +92,8 @@ public class EdgeCaseTests(CustomWebApplicationFactory factory) : IntegrationTes
         var loansResponse = await Client.GetAsync($"/api/loans/equity/{equity!.Id}");
         var loans = await loansResponse.Content.ReadFromJsonAsync<IEnumerable<LoanDto>>();
 
-        Assert.Equal(10, loans!.Count());
-        Assert.Equal(10, loans.Select(l => l.Id).Distinct().Count());
+        var loanDtos = loans!.ToList();
+        Assert.Equal(10, loanDtos.Count);
+        Assert.Equal(10, loanDtos.Select(l => l.Id).Distinct().Count());
     }
 }

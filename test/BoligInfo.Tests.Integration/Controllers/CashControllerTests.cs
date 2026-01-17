@@ -108,10 +108,12 @@ public class CashControllerTests(CustomWebApplicationFactory factory) : Integrat
 
         response.EnsureSuccessStatusCode();
         var cashRecords = await response.Content.ReadFromJsonAsync<IEnumerable<CashDto>>();
+        var cashDtos = cashRecords!.ToList();
+        
         Assert.NotNull(cashRecords);
-        Assert.Single(cashRecords);
-        Assert.Equal(equityId, cashRecords.First().EquityId);
-        Assert.Equal(50000.0, cashRecords.First().CashAmount);
+        Assert.Single(cashDtos);
+        Assert.Equal(equityId, cashDtos.First().EquityId);
+        Assert.Equal(50000.0, cashDtos.First().CashAmount);
     }
     
     [Fact]
