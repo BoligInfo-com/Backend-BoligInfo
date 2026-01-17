@@ -12,6 +12,7 @@ public class EquityService(
     ICashRepository cashRepository
     ) : IEquityService
 {
+    // ==================== GET VALIDATION ==================== //
     public async Task<IEnumerable<EquityDto>> GetAllEquitiesAsync()
     {
         var equities = await equityRepository.GetAllAsync();
@@ -36,6 +37,7 @@ public class EquityService(
         return equity == null ? null : MapToDtoWithCash(equity);
     }
 
+    // ==================== POST VALIDATION ==================== //
     public async Task<EquityDto> CreateEquityAsync(CreateEquityDto createEquityDto)
     {
         var equity = new Equity
@@ -47,6 +49,7 @@ public class EquityService(
         return MapToDto(createdEquity);
     }
 
+    // ==================== PUT VALIDATION ==================== //
     public async Task<EquityDto> UpdateEquityAsync(long id, UpdateEquityDto updateEquityDto)
     {
         var equity = await equityRepository.GetByIdAsync(id);
@@ -60,6 +63,7 @@ public class EquityService(
         return MapToDto(equity);
     }
 
+    // ==================== DELETE VALIDATION ==================== //
     public async Task DeleteEquityAsync(long id)
     {
         var equity = await equityRepository.GetByIdWithLoansAsync(id);
@@ -89,6 +93,7 @@ public class EquityService(
         await equityRepository.DeleteAsync(id);
     }
 
+    // ==================== DTO MAPPING ==================== //
     private static EquityDto MapToDto(Equity equity)
     {
         return new EquityDto

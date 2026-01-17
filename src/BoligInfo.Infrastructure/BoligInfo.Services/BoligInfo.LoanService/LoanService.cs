@@ -8,6 +8,7 @@ namespace BoligInfo.LoanService;
 
 public class LoanService(ILoanRepository loanRepository, IEquityRepository equityRepository) : ILoanService
 {
+    // ==================== GET VALIDATION ==================== //
     public async Task<IEnumerable<LoanDto>> GetAllLoansAsync()
     {
         var loans = await loanRepository.GetAllAsync();
@@ -26,6 +27,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
         return loans.Select(MapToDto);
     }
 
+    // ==================== POST VALIDATION ==================== //
     public async Task<LoanDto> CreateLoanAsync(CreateLoanDto createLoanDto)
     {
         // Ensure parent Equity exists
@@ -48,6 +50,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
         return MapToDto(createdLoan);
     }
 
+    // ==================== PUT VALIDATION ==================== //
     public async Task<LoanDto> UpdateLoanAsync(long id, UpdateLoanDto updateLoanDto)
     {
         var loan = await loanRepository.GetByIdAsync(id);
@@ -70,6 +73,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
         return MapToDto(loan);
     }
 
+    // ==================== DELETE VALIDATION ==================== //
     public async Task DeleteLoanAsync(long id)
     {
         var exists = await loanRepository.ExistsAsync(id);
@@ -79,6 +83,7 @@ public class LoanService(ILoanRepository loanRepository, IEquityRepository equit
         await loanRepository.DeleteAsync(id);
     }
 
+    // ==================== DTO MAPPING ==================== //
     private static LoanDto MapToDto(Loan loan)
     {
         return new LoanDto

@@ -7,7 +7,7 @@ namespace BoligInfo.CashService;
 
 public class CashService(ICashRepository cashRepository, IEquityRepository equityRepository) : ICashService
 {
-    
+    // ==================== GET VALIDATION ==================== //
     public async Task<IEnumerable<CashDto>> GetAllCashAsync()
     {
         var allCash = await cashRepository.GetAllAsync();
@@ -26,6 +26,7 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
         return allCash.Select(MapToDto); 
     }
 
+    // ==================== POST VALIDATION ==================== //
     public async Task<CashDto> CreateCashAsync(CreateCashDto createCashDto)
     {
         // Ensure parent Equity exists
@@ -49,6 +50,7 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
         return MapToDto(createdCash);
     }
 
+    // ==================== PUT VALIDATION ==================== //
     public async Task<CashDto> UpdateCashAsync(long id, UpdateCashDto updateCashDto)
     {
         var cash = await cashRepository.GetByIdAsync(id);
@@ -62,6 +64,7 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
         return MapToDto(cash);
     }
 
+    // ==================== DELETE VALIDATION ==================== //
     public async Task DeleteCashAsync(long id)
     {
         var exists = await cashRepository.ExistsAsync(id);
@@ -71,6 +74,7 @@ public class CashService(ICashRepository cashRepository, IEquityRepository equit
         await cashRepository.DeleteAsync(id);
     }
 
+    // ==================== DTO MAPPING ==================== //
     private static CashDto MapToDto(Cash cash)
     {
         return new CashDto
