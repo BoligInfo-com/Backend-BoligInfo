@@ -1,3 +1,4 @@
+using System.Reflection;
 using Boliginfo.CashRepository;
 using BoligInfo.CashService;
 using BoligInfo.Core.Enums;
@@ -15,7 +16,7 @@ using Npgsql.NameTranslation;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// configure PostgreSQL if not in test environment
+// configure PostgresSQL if not in test environment
 if (!builder.Environment.EnvironmentName.Equals("Test", StringComparison.OrdinalIgnoreCase))
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -37,7 +38,12 @@ builder.Services.AddControllers()
         options.SuppressModelStateInvalidFilter = false;
     });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 builder.Services.AddAuthorization();
 builder.Services.AddLogging();
 

@@ -5,17 +5,17 @@ namespace BoligInfo.Tests.Integration.Setup;
 public class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     protected readonly HttpClient Client;
-    protected readonly CustomWebApplicationFactory Factory;
+    private readonly CustomWebApplicationFactory _factory;
 
     protected IntegrationTestBase(CustomWebApplicationFactory factory)
     {
-        Factory = factory;
+        _factory = factory;
         Client = factory.CreateClient();
     }
 
-    protected BoligInfoDbContext GetDbContext()
+    private BoligInfoDbContext GetDbContext()
     {
-        return Factory.CreateDbContext();
+        return _factory.CreateDbContext();
     }
 
     protected async Task<BoligInfoDbContext> GetDbContextAsync()
@@ -25,7 +25,7 @@ public class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory>, I
 
     protected async Task CleanDatabaseAsync()
     {
-        using var context = GetDbContext();
+        await using var context = await GetDbContextAsync();
         
         // Remove in correct order (children first)
         context.AllCash.RemoveRange(context.AllCash);

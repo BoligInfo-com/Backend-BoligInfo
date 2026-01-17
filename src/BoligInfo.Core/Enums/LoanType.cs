@@ -1,4 +1,5 @@
-﻿namespace BoligInfo.Core.Enums;
+﻿// ReSharper disable InconsistentNaming
+namespace BoligInfo.Core.Enums;
 
 public enum LoanType
 {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BoligInfo.Tests.Integration.Setup;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly string _databaseName = $"TestDb_{Guid.NewGuid()}";
