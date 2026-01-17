@@ -39,7 +39,7 @@ public class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory>, I
 
     public void Dispose()
     {
-        Client?.Dispose();
+        Client.Dispose();
         GC.SuppressFinalize(this);
     }
 }

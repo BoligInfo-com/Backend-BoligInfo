@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using BoligInfo.Core.DTO;
 using BoligInfo.Tests.Integration.Setup;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace BoligInfo.Tests.Integration.Controllers;
 
@@ -234,9 +233,11 @@ public class CashFlowControllerTests(CustomWebApplicationFactory factory) : Inte
 
         response.EnsureSuccessStatusCode();
         var cashFlows = await response.Content.ReadFromJsonAsync<IEnumerable<CashFlowDto>>();
+        var cashFlowDtos = cashFlows!.ToList();
+        
         Assert.NotNull(cashFlows);
-        Assert.Equal(2, cashFlows.Count());
-        Assert.All(cashFlows, cf => Assert.Equal(houseId, cf.HouseId));
+        Assert.Equal(2, cashFlowDtos.Count);
+        Assert.All(cashFlowDtos, cf => Assert.Equal(houseId, cf.HouseId));
     }
 
     [Fact]
