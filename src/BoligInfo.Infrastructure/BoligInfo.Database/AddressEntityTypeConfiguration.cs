@@ -21,8 +21,8 @@ public class AddressEntityTypeConfiguration : IEntityTypeConfiguration<Address>
             .Property(a => a.Country)
             .HasColumnName("Country")
             .HasColumnType("character varying(180)")
-            .HasDefaultValue("Denmark")
             .HasMaxLength(180)
+            .HasDefaultValue("Denmark")
             .IsRequired();
         
         builder
@@ -68,14 +68,16 @@ public class AddressEntityTypeConfiguration : IEntityTypeConfiguration<Address>
         
         builder
             .Property(a => a.HouseId)
-            .HasColumnName("HouseId")
+            .HasColumnName("HouseID")
             .HasColumnType("bigint")
             .IsRequired();
         
+        // Configure one-to-one relationship
         builder
             .HasOne<House>()
             .WithOne(h => h.Address)
             .HasForeignKey<Address>(a => a.HouseId)
+            .HasConstraintName("Address_HouseID_fkey")
             .IsRequired();
     }
 }
