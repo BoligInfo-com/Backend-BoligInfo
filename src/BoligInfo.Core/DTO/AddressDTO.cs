@@ -19,7 +19,7 @@ public class CreateAddressDto
 {
     [Required]
     [MaxLength(180, ErrorMessage = "Country cannot exceed 180 characters")]
-    public string Country { get; set; } = "Denmark";
+    public string? Country { get; set; } = "Denmark";
     
     [Required]
     [MaxLength(340, ErrorMessage = "Country cannot exceed 340 characters")]
@@ -64,5 +64,6 @@ public class UpdateAddressDto
     
     [MaxLength(20, ErrorMessage = "Suite cannot exceed 20 characters")]
     public string? Suite {get; set;}
+    
     public int? Floor { get; set; }
 }
