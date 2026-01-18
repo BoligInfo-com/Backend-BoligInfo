@@ -1,4 +1,6 @@
 using System.Reflection;
+using BoligInfo.AddressRepository;
+using BoligInfo.AddressService;
 using BoligInfo.CashFlowRepository;
 using BoligInfo.CashFlowService;
 using Boliginfo.CashRepository;
@@ -70,6 +72,7 @@ builder.Services.AddScoped<IEquityRepository, EquityRepository>();
 builder.Services.AddScoped<ICashRepository, CashRepository>();
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
 builder.Services.AddScoped<ICashFlowRepository, CashFlowRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>(); 
 
 // Register services for the scope of a request
 builder.Services.AddScoped<ILoanService, LoanService>();
@@ -77,6 +80,7 @@ builder.Services.AddScoped<IEquityService, EquityService>();
 builder.Services.AddScoped<ICashService, CashService>();
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<ICashFlowService, CashFlowService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 
 
 var app = builder.Build();
