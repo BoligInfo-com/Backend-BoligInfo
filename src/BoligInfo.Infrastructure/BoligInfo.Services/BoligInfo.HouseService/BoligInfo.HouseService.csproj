@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BoligInfo.Core\BoligInfo.Core.csproj" />
+      <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.AddressRepository\BoligInfo.AddressRepository.csproj" />
       <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.CashFlowRepository\BoligInfo.CashFlowRepository.csproj" />
       <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.EquityRepository\BoligInfo.EquityRepository.csproj" />
       <ProjectReference Include="..\..\BoligInfo.Repositories\BoligInfo.HouseRepository\BoligInfo.HouseRepository.csproj" />
