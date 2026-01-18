@@ -1,4 +1,5 @@
-﻿using BoligInfo.Core.DTO;
+﻿using BoligInfo.AddressRepository;
+using BoligInfo.Core.DTO;
 using BoligInfo.Core.Enums;
 using BoligInfo.Core.Models;
 using BoligInfo.EquityRepository;
@@ -10,7 +11,8 @@ namespace BoligInfo.HouseService;
 public class HouseService(
     IHouseRepository houseRepository,
     IEquityRepository equityRepository,
-    ICashFlowRepository cashFlowRepository) : IHouseService
+    ICashFlowRepository cashFlowRepository,
+    IAddressRepository addressRepository) : IHouseService
 {
     public async Task<IEnumerable<HouseDto>> GetAllHousesAsync()
     {
@@ -90,12 +92,19 @@ public class HouseService(
             throw new KeyNotFoundException($"House with ID {id} not found");
 
         // Delete all cash flows associated with this house
-        if (house.CashFlows != null && house.CashFlows.Any())
+        if (house.CashFlows != null && house.CashFlows.Count != 0)
         {
             foreach (var cashFlow in house.CashFlows.ToList())
             {
                 await cashFlowRepository.DeleteAsync(cashFlow.Id);
             }
+        }
+        
+        // Delete address if exists
+        var address = await addressRepository.GetByHouseIdAsync(id);
+        if (address != null)
+        {
+            await addressRepository.DeleteAsync(address.Id);
         }
 
         await houseRepository.DeleteAsync(id);

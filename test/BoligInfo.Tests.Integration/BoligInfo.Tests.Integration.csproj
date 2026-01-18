@@ -30,4 +30,8 @@
     <ProjectReference Include="..\..\src\BoligInfo.Api\BoligInfo.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CoverageReport\" />
+  </ItemGroup>
+
 </Project>

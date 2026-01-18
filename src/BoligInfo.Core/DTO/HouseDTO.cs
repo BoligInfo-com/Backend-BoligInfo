@@ -11,6 +11,7 @@ public class HouseDto
     public string? EnergyLabel { get; set; }
     public DateOnly? PurchaseDate { get; set; }
     public long EquityId { get; set; }
+    public AddressDto Address { get; set; }
     public ICollection<CashFlowDto>? CashFlows { get; set; }
 }
 

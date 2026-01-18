@@ -42,7 +42,7 @@ public class LoanEntityTypeConfiguration : IEntityTypeConfiguration<Loan>
         builder
             .Property(l => l.LoanLifetime)
             .HasColumnName("LoanLifetime")
-            .HasColumnName("LoanLifetime")
+            .HasColumnType("integer")
             .IsRequired(false);
        
         builder

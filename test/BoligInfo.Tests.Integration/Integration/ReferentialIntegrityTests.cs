@@ -7,6 +7,226 @@ namespace BoligInfo.Tests.Integration.Integration;
 
 public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
+    
+    [Fact]
+    public async Task Delete_House_CascadesDeleteToAddress()
+    {
+        var equityDto = new CreateEquityDto { Currency = "DKK" };
+        var equityResponse = await Client.PostAsJsonAsync("/api/equities", equityDto);
+        var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
+
+        var houseDto = new CreateHouseDto
+        {
+            EquityId = equity!.Id,
+            Price = 2500000.0
+        };
+        var houseResponse = await Client.PostAsJsonAsync("/api/houses", houseDto);
+        var house = await houseResponse.Content.ReadFromJsonAsync<HouseDto>();
+
+        var addressDto = new CreateAddressDto
+        {
+            HouseId = house!.Id,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Nørrebrogade"
+        };
+        var addressResponse = await Client.PostAsJsonAsync("/api/addresses", addressDto);
+        var address = await addressResponse.Content.ReadFromJsonAsync<AddressDto>();
+
+        var deleteResponse = await Client.DeleteAsync($"/api/houses/{house.Id}");
+        var addressGetResponse = await Client.GetAsync($"/api/addresses/{address!.Id}");
+
+        Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, addressGetResponse.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Delete_Equity_CascadesDeleteToHouseAndAddress()
+    {
+        var equityDto = new CreateEquityDto { Currency = "EUR" };
+        var equityResponse = await Client.PostAsJsonAsync("/api/equities", equityDto);
+        var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
+
+        var houseDto = new CreateHouseDto
+        {
+            EquityId = equity!.Id,
+            Price = 3000000.0
+        };
+        var houseResponse = await Client.PostAsJsonAsync("/api/houses", houseDto);
+        var house = await houseResponse.Content.ReadFromJsonAsync<HouseDto>();
+
+        var addressDto = new CreateAddressDto
+        {
+            HouseId = house!.Id,
+            City = "Aarhus",
+            Zipcode = "8000",
+            Street = "Vestergade"
+        };
+        var addressResponse = await Client.PostAsJsonAsync("/api/addresses", addressDto);
+        var address = await addressResponse.Content.ReadFromJsonAsync<AddressDto>();
+
+        var deleteResponse = await Client.DeleteAsync($"/api/equities/{equity.Id}");
+        var houseGetResponse = await Client.GetAsync($"/api/houses/{house.Id}");
+        var addressGetResponse = await Client.GetAsync($"/api/addresses/{address!.Id}");
+
+        Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, houseGetResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, addressGetResponse.StatusCode);
+    }
+    
+    [Fact]
+    public async Task House_CanHaveOnlyOneAddress()
+    {
+        var equityDto = new CreateEquityDto { Currency = "DKK" };
+        var equityResponse = await Client.PostAsJsonAsync("/api/equities", equityDto);
+        var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
+
+        var houseDto = new CreateHouseDto
+        {
+            EquityId = equity!.Id,
+            Price = 2000000.0
+        };
+        var houseResponse = await Client.PostAsJsonAsync("/api/houses", houseDto);
+        var house = await houseResponse.Content.ReadFromJsonAsync<HouseDto>();
+
+        // First address should succeed
+        var address1Dto = new CreateAddressDto
+        {
+            HouseId = house!.Id,
+            City = "Odense",
+            Zipcode = "5000",
+            Street = "Kongensgade"
+        };
+        var address1Response = await Client.PostAsJsonAsync("/api/addresses", address1Dto);
+        address1Response.EnsureSuccessStatusCode();
+
+        // Second address should fail (one-to-one constraint)
+        var address2Dto = new CreateAddressDto
+        {
+            HouseId = house.Id,
+            City = "Esbjerg",
+            Zipcode = "6700",
+            Street = "Torvegade"
+        };
+        var address2Response = await Client.PostAsJsonAsync("/api/addresses", address2Dto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, address2Response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task ComplexScenario_EquityWithHouseAddressAndCashFlows()
+    {
+        var equityDto = new CreateEquityDto { Currency = "USD" };
+        var equityResponse = await Client.PostAsJsonAsync("/api/equities", equityDto);
+        var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
+
+        var houseDto = new CreateHouseDto
+        {
+            EquityId = equity!.Id,
+            Price = 3500000.0,
+            NumberOfRooms = 5,
+            SquareMeters = 150,
+            EnergyLabel = "B"
+        };
+        var houseResponse = await Client.PostAsJsonAsync("/api/houses", houseDto);
+        var house = await houseResponse.Content.ReadFromJsonAsync<HouseDto>();
+
+        var addressDto = new CreateAddressDto
+        {
+            HouseId = house!.Id,
+            Country = "Denmark",
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Nørrebrogade",
+            Number = "45",
+            Floor = 3
+        };
+        var addressResponse = await Client.PostAsJsonAsync("/api/addresses", addressDto);
+
+        var cashFlow1Dto = new CreateCashFlowDto
+        {
+            HouseId = house.Id,
+            Type = "EXPENSE",
+            Frequency = "MONTHLY",
+            Amount = 15000.0,
+            Name = "Mortgage"
+        };
+        var cashFlow1Response = await Client.PostAsJsonAsync("/api/cashflows", cashFlow1Dto);
+
+        var cashFlow2Dto = new CreateCashFlowDto
+        {
+            HouseId = house.Id,
+            Type = "INCOME",
+            Frequency = "MONTHLY",
+            Amount = 20000.0,
+            Name = "Rent"
+        };
+        var cashFlow2Response = await Client.PostAsJsonAsync("/api/cashflows", cashFlow2Dto);
+
+        // Verify all were created successfully
+        addressResponse.EnsureSuccessStatusCode();
+        cashFlow1Response.EnsureSuccessStatusCode();
+        cashFlow2Response.EnsureSuccessStatusCode();
+
+        // Verify address exists for house
+        var addressGetResponse = await Client.GetAsync($"/api/addresses/house/{house.Id}");
+        addressGetResponse.EnsureSuccessStatusCode();
+        var addressResult = await addressGetResponse.Content.ReadFromJsonAsync<AddressDto>();
+        Assert.NotNull(addressResult);
+        Assert.Equal("Copenhagen", addressResult.City);
+
+        // Verify cash flows exist for house
+        var cashFlowsResponse = await Client.GetAsync($"/api/cashflows/house/{house.Id}");
+        var cashFlows = await cashFlowsResponse.Content.ReadFromJsonAsync<IEnumerable<CashFlowDto>>();
+        Assert.NotNull(cashFlows);
+        Assert.Equal(2, cashFlows.Count());
+    }
+    
+    [Fact]
+    public async Task Delete_Address_AllowsNewAddressForSameHouse()
+    {
+        var equityDto = new CreateEquityDto { Currency = "DKK" };
+        var equityResponse = await Client.PostAsJsonAsync("/api/equities", equityDto);
+        var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
+
+        var houseDto = new CreateHouseDto
+        {
+            EquityId = equity!.Id,
+            Price = 2000000.0
+        };
+        var houseResponse = await Client.PostAsJsonAsync("/api/houses", houseDto);
+        var house = await houseResponse.Content.ReadFromJsonAsync<HouseDto>();
+
+        // Create first address
+        var address1Dto = new CreateAddressDto
+        {
+            HouseId = house!.Id,
+            City = "Aalborg",
+            Zipcode = "9000",
+            Street = "Boulevarden"
+        };
+        var address1Response = await Client.PostAsJsonAsync("/api/addresses", address1Dto);
+        var address1 = await address1Response.Content.ReadFromJsonAsync<AddressDto>();
+
+        // Delete first address
+        await Client.DeleteAsync($"/api/addresses/{address1!.Id}");
+
+        // Create new address for same house - should succeed
+        var address2Dto = new CreateAddressDto
+        {
+            HouseId = house.Id,
+            City = "Randers",
+            Zipcode = "8900",
+            Street = "Storegade"
+        };
+        var address2Response = await Client.PostAsJsonAsync("/api/addresses", address2Dto);
+
+        address2Response.EnsureSuccessStatusCode();
+        var address2 = await address2Response.Content.ReadFromJsonAsync<AddressDto>();
+        Assert.NotNull(address2);
+        Assert.Equal("Randers", address2.City);
+    }
+    
     [Fact]
     public async Task Delete_House_CascadesDeleteToCashFlows()
     {
@@ -124,7 +344,6 @@ public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : In
         Assert.Equal(2, houses.Count());
     }
     
-    
     [Fact]
     public async Task House_CanHaveMultipleCashFlows()
     {
@@ -175,7 +394,6 @@ public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : In
         Assert.NotNull(houseWithCashFlows.CashFlows);
         Assert.Equal(3, houseWithCashFlows.CashFlows.Count);
     }
-    
     
     [Fact]
     public async Task Equity_CanHaveMultipleLoans()
@@ -339,7 +557,6 @@ public class ReferentialIntegrityTests(CustomWebApplicationFactory factory) : In
         Assert.Single(house2CashFlows);
         Assert.Equal(5000000.0, houseDtos.Sum(h => h.Price));
     }
-    
     
     [Fact]
     public async Task DatabaseConstraint_PreventsDuplicateEquitiesWithSameId()

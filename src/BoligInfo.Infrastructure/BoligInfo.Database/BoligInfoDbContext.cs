@@ -29,6 +29,7 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
     public DbSet<Cash> AllCash { get; set; }
     public DbSet<House> Houses { get; set; }
     public DbSet<CashFlow> CashFlows { get; set; }
+    public DbSet<Address> Addresses { get; set; }
     
     
     /// <summary>
@@ -51,5 +52,6 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
         new CashEntityTypeConfiguration().Configure(modelBuilder.Entity<Cash>());
         new HouseEntityTypeConfiguration().Configure(modelBuilder.Entity<House>());
         new CashFlowEntityTypeConfiguration().Configure(modelBuilder.Entity<CashFlow>());
+        new AddressEntityTypeConfiguration().Configure(modelBuilder.Entity<Address>());
     }
 }

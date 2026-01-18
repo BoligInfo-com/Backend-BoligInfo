@@ -28,6 +28,7 @@ public class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory>, I
         await using var context = await GetDbContextAsync();
         
         // Remove in correct order (children first, parents last)
+        context.Addresses.RemoveRange(context.Addresses);
         context.CashFlows.RemoveRange(context.CashFlows);
         context.Houses.RemoveRange(context.Houses);
         context.AllCash.RemoveRange(context.AllCash);
@@ -39,7 +40,7 @@ public class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory>, I
 
     public void Dispose()
     {
-        Client?.Dispose();
+        Client.Dispose();
         GC.SuppressFinalize(this);
     }
 }
