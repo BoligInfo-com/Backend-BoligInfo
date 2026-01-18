@@ -12,6 +12,6 @@ public class House
     public DateOnly? PurchaseDate { get; set; }
     public long EquityId { get; set; }
     
-    public Address Address { get; set; }
+    public Address? Address { get; set; }
     public ICollection<CashFlow>? CashFlows { get; set; }
 }
