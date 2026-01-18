@@ -7,6 +7,22 @@ namespace BoligInfo.Tests.Integration.Validation;
 
 public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {
+    private async Task<long> CreateHouseAsync()
+    {
+        var equityDto = new CreateEquityDto { Currency = "DKK" };
+        var equityResponse = await Client.PostAsJsonAsync("/api/equities", equityDto);
+        var equity = await equityResponse.Content.ReadFromJsonAsync<EquityDto>();
+
+        var houseDto = new CreateHouseDto
+        {
+            EquityId = equity!.Id,
+            Price = 2000000.0
+        };
+        var houseResponse = await Client.PostAsJsonAsync("/api/houses", houseDto);
+        var house = await houseResponse.Content.ReadFromJsonAsync<HouseDto>();
+        return house!.Id;
+    }
+    
     private async Task<long> CreateEquityAsync()
     {
         var createDto = new CreateEquityDto { Currency = "DKK" };
@@ -26,6 +42,289 @@ public class ValidationTests(CustomWebApplicationFactory factory) : IntegrationT
         var house = await response.Content.ReadFromJsonAsync<HouseDto>();
         return house!.Id;
     }
+    
+    [Fact]
+    public async Task Address_RejectsCountryLongerThan180Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            Country = new string('A', 181),
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_AcceptsCountryUpTo180Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            Country = new string('A', 180),
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task Address_RejectsCityLongerThan340Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = new string('B', 341),
+            Zipcode = "2100",
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_AcceptsCityUpTo340Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = new string('B', 340),
+            Zipcode = "2100",
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task Address_RejectsZipcodeLongerThan80Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = new string('C', 81),
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_AcceptsZipcodeUpTo80Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = new string('C', 80),
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task Address_RejectsStreetLongerThan340Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = new string('D', 341)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_AcceptsStreetUpTo340Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = new string('D', 340)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task Address_RejectsNumberLongerThan20Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street",
+            Number = new string('E', 21)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_AcceptsNumberUpTo20Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street",
+            Number = new string('E', 20)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task Address_RejectsSuiteLongerThan20Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street",
+            Suite = new string('F', 21)
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_AcceptsSuiteUpTo20Characters()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street",
+            Suite = new string('F', 20)
+        };
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(50)]
+    [InlineData(int.MaxValue)]
+    public async Task Address_AcceptsValidFloorNumbers(int floor)
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = "Main Street",
+            Floor = floor
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        response.EnsureSuccessStatusCode();
+    }
+    
+    [Fact]
+    public async Task Address_RequiresCityField()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = null!,
+            Zipcode = "2100",
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_RequiresZipcodeField()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = null!,
+            Street = "Main Street"
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task Address_RequiresStreetField()
+    {
+        var houseId = await CreateHouseAsync();
+        var createDto = new CreateAddressDto
+        {
+            HouseId = houseId,
+            City = "Copenhagen",
+            Zipcode = "2100",
+            Street = null!
+        };
+
+        var response = await Client.PostAsJsonAsync("/api/addresses", createDto);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    
     
     [Theory]
     [InlineData(-1000000.0)]
