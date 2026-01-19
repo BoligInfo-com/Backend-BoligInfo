@@ -9,7 +9,7 @@ namespace BoligInfo.Database;
 
 /// <summary>
 /// Database context for the BoligInfo application.
-/// Configures DbSets, PostgreSQL enum mapping, and entity configurations.
+/// Configures DbSets, PostgresSQL enum mapping, and entity configurations.
 /// </summary>
 public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : DbContext(options)
 {
@@ -27,13 +27,25 @@ public class BoligInfoDbContext(DbContextOptions<BoligInfoDbContext> options) : 
     /// DbSet for cash records in the system.
     /// </summary>
     public DbSet<Cash> AllCash { get; set; }
+    
+    /// <summary>
+    /// DbSet for house records in the system.
+    /// </summary>
     public DbSet<House> Houses { get; set; }
+    
+    /// <summary>
+    /// DbSet for CashFlow records in the system.
+    /// </summary>
     public DbSet<CashFlow> CashFlows { get; set; }
+    
+    /// <summary>
+    /// DbSet for Address records in the system.
+    /// </summary>
     public DbSet<Address> Addresses { get; set; }
     
     
     /// <summary>
-    /// Configures entity mappings, PostgreSQL enum types, and constraints.
+    /// Configures entity mappings, PostgresSQL enum types, and constraints.
     /// </summary>
     /// <param name="modelBuilder">ModelBuilder instance for configuring EF Core models.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
