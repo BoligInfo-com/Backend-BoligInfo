@@ -4,7 +4,7 @@ public class EquityFinancialSummaryDto
 {
     public long EquityId { get; set; }
     public int NumberOfHouses { get; set; }
-    public decimal TotalMonthlyIncome { get; set; }
-    public decimal TotalMonthlyExpenses { get; set; }
-    public decimal NetMonthlyCashFlow { get; set; }
+    public double TotalMonthlyIncome { get; set; }
+    public double TotalMonthlyExpenses { get; set; }
+    public double NetMonthlyCashFlow { get; set; }
 }
