@@ -1,11 +1,11 @@
 ﻿using BoligInfo.Core.Enums;
 using BoligInfo.Core.Models;
 
-namespace BoligInfo.Core.CashFlowConversionHelper;
+namespace BoligInfo.BusinessLogic.CashFlowConversionHelper;
 
-public class CashFlowConversionHelper
+public class CashFlowConversionHelper : ICashFlowConversionHelper
 {
-    private static double ToMonthlyAmount(CashFlow cf)
+    public double ToMonthlyAmount(CashFlow cf)
     {
         return cf.Frequency switch
         { 
