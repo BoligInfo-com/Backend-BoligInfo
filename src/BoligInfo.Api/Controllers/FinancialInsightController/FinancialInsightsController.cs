@@ -1,4 +1,4 @@
-﻿using BoligInfo.BusinessLogic.FinancialService;
+﻿using BoligInfo.BusinessLogic.FinancialInsightService;
 using BoligInfo.Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,6 +1,6 @@
 ﻿using BoligInfo.Core.DTO;
 
-namespace BoligInfo.BusinessLogic.FinancialService;
+namespace BoligInfo.BusinessLogic.FinancialInsightService;
 
 public interface IFinancialInsightService
 {

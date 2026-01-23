@@ -4,9 +4,9 @@ using BoligInfo.Core.Enums;
 using BoligInfo.HouseRepository;
 using Microsoft.Extensions.Logging;
 
-namespace BoligInfo.BusinessLogic.FinancialService;
+namespace BoligInfo.BusinessLogic.FinancialInsightService;
 
-public class FinancialInsightService(
+public class FinancialInsightService (
     IHouseRepository houseRepository,
     ICashFlowConversionHelper  cashFlowConversionHelper,
     ILogger<FinancialInsightService> logger
