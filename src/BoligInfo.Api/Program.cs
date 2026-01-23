@@ -1,6 +1,7 @@
 using System.Reflection;
 using BoligInfo.AddressRepository;
 using BoligInfo.AddressService;
+using BoligInfo.BusinessLogic.FinancialInsightService;
 using BoligInfo.CashFlowRepository;
 using BoligInfo.CashFlowService;
 using Boliginfo.CashRepository;
@@ -81,6 +82,7 @@ builder.Services.AddScoped<ICashService, CashService>();
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<ICashFlowService, CashFlowService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IFinancialInsightService, FinancialInsightService>();
 
 
 var app = builder.Build();
