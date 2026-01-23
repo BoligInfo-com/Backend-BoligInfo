@@ -2,7 +2,7 @@
 
 public class PortfolioSummaryDto
 {
-    public decimal TotalMonthlyCashFlow { get; set; }
-    public decimal TotalAnnualCashFlow { get; set; }
+    public double TotalMonthlyCashFlow { get; set; }
+    public double TotalAnnualCashFlow { get; set; }
     public int TotalProperties { get; set; }
 }
